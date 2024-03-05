@@ -252,8 +252,48 @@ ALTER TABLE `users`
 -- Ограничения внешнего ключа таблицы `users`
 --
 ALTER TABLE `users`
-  ADD CONSTRAINT `users_student_2` FOREIGN KEY (`id_student`) REFERENCES `students` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `users_teacher_1` FOREIGN KEY (`id_teacher`) REFERENCES `teachers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `users_student` FOREIGN KEY (`id_student`) REFERENCES `students` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `users_teacher` FOREIGN KEY (`id_teacher`) REFERENCES `teachers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+
+--
+-- Ограничения внешнего ключа таблицы `logbook`
+--
+ALTER TABLE `logbook`
+  ADD CONSTRAINT "logbook_editor" FOREIGN KEY (`last_editor`) REFERENCES `users` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT "logbook_student" FOREIGN KEY (`id_student`) REFERENCES `students` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT "logbook_schedule" FOREIGN KEY (`id_schedule`) REFERENCES `schedule` (`id`) ON DELETE CASCADE ON UPDATE CASCADE; 
+COMMIT;
+
+--
+-- Ограничения внешнего ключа таблицы `students`
+--
+ALTER TABLE `students`
+  ADD CONSTRAINT "logbook_group" FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON UPDATE CASCADE;
+COMMIT;
+
+--
+-- Ограничения внешнего ключа таблицы `groups`
+--
+ALTER TABLE `groups`
+  ADD CONSTRAINT "grups_tutor" FOREIGN KEY (`tutor_id`) REFERENCES `teachers` (`id`) ON UPDATE CASCADE;
+COMMIT;
+
+--
+-- Ограничения внешнего ключа таблицы `lessons`
+--
+ALTER TABLE `lessons`
+  ADD CONSTRAINT "lessons_teacher_first" FOREIGN KEY (`teacher_group_first`) REFERENCES `teachers` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT "lessons_teacher_second" FOREIGN KEY (`teacher_group_second`) REFERENCES `teachers` (`id`) ON UPDATE CASCADE;
+COMMIT;
+
+--
+-- Ограничения внешнего ключа таблицы `schedule`
+--
+ALTER TABLE `schedule`
+  ADD CONSTRAINT "schedule_lesson" FOREIGN KEY (`id_lesson`) REFERENCES `lessons` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT "schedule_" FOREIGN KEY (`id_teacher_first`) REFERENCES `teachers` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT "schedule_" FOREIGN KEY (`id_teacher_second`) REFERENCES `teachers` (`id`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
