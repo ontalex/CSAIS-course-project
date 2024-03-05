@@ -1,10 +1,12 @@
 import st from "./page.module.css";
 
-export default function Admin() {
+import React from "react";
+
+export default function Data() {
     return (
         <div className={st.page}>
             <div className={st.section_name}>
-                <h1>Главная страница</h1>
+                <h1>Данные</h1>
             </div>
             <div className={st.content}>
                 <h1>Главная</h1>

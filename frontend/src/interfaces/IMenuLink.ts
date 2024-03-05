@@ -1,5 +1,5 @@
 export interface IMenuLink {
     href: string,
-    icon: React.ReactSVGElement,
+    icon: React.ReactElement,
     name: string
 }

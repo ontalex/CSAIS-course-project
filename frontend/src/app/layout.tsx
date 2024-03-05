@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ILayout } from "@/interfaces/ILayout";
+import {useStyleCombing} from "@/hooks/useStyleCombing";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,7 +16,7 @@ export default function RootLayout({
 }: Readonly<ILayout>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={useStyleCombing(inter.className, "body")}>{children}</body>
     </html>
   );
 }

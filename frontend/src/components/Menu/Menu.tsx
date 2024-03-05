@@ -9,7 +9,7 @@ export default function Menu(props: IMenu) {
     <nav className={st.menu}>
       <div className={st.section}>
         {props.linksPage.map((link) => (
-          <LinkMenu href={link.href} icon={link.icon} name={link.name} />
+          <LinkMenu href={link.href} icon={link.icon} name={link.name} key={link.name}/>
         ))}
       </div>
       <div className={st.section}>{props.children}</div>

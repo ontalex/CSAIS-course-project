@@ -1,10 +1,12 @@
 import st from "./page.module.css";
 
-export default function Admin() {
-    return (
-        <div className={st.page}>
+import React from 'react'
+
+export default function Schedule() {
+  return (
+    <div className={st.page}>
             <div className={st.section_name}>
-                <h1>Главная страница</h1>
+                <h1>Расписание</h1>
             </div>
             <div className={st.content}>
                 <h1>Главная</h1>
@@ -24,5 +26,5 @@ export default function Admin() {
                 </p>
             </div>
         </div>
-    );
+  )
 }
