@@ -1,0 +1,7 @@
+.wrapper {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 6px 16px;
+    overflow-y: auto;
+    height: 100%;
+}

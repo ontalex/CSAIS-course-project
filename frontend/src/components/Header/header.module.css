@@ -1,0 +1,11 @@
+@import "/src/vars.css";
+
+.header_box {
+    width: 100%;
+    background-color: var(--white-1);
+    padding: 6px 16px;
+}
+
+.header_box .text {
+    font-size: 18px;
+}

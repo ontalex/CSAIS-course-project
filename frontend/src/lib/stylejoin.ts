@@ -1,0 +1,1 @@
+export default (...styles: string[]) => styles.join(" ");

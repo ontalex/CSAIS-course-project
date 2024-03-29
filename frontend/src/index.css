@@ -1,0 +1,13 @@
+@import './vars.css';
+
+body {
+  margin: 0;
+  overflow: hidden;
+
+  font-family: sans-serif;
+}
+
+#root {
+  width: 100svw;
+  height: 100svh;
+}
