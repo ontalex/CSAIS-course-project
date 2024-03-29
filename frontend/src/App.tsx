@@ -20,11 +20,8 @@ export default function App() {
         <>
             <AuthProvider>
                 <Routes>
-                    <Route
-                        path="/"
-                        element={<Index />}
-                        errorElement={<Error />}
-                    >
+                    <Route path="/" element={<Index />}>
+                        <Route path="*" element={<Error />} />
                         <Route
                             path="login"
                             element={<Login />}
@@ -39,6 +36,7 @@ export default function App() {
                             }
                             errorElement={<Error />}
                         >
+                            <Route path="*" element={<Error />} />
                             <Route index element={<Home />} />
                             <Route path="logbook" element={<Logbook />} />
                             <Route path="schedule" element={<Schedule />} />
