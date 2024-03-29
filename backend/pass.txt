@@ -1,0 +1,12 @@
+rule: staff (2),
+login: staff,
+password: ,TfFe,
+
+rule: tutor (0),
+login: tutor,
+password: }:1S7,
+
+rule: older (1),
+login: older,
+password: xQ[zo,
+
