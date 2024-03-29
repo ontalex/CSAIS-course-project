@@ -82,11 +82,39 @@ class AuthController {
         try {
             let decoded = req.user; // type role, user id
 
+            let sqlTutor = 'SELECT `groups`.`id`, `groups`.`name` FROM `users` JOIN `groups` ON `users`.`teachers_id` = `groups`.`tutor_id` WHERE `users`.`id` = ?;'; // teachers
+            let sqlOlder = 'SELECT `groups`.`id`, `groups`.`name` FROM `users` JOIN `students` ON `users`.`students_id` = `students`.`id` JOIN `groups` on `students`.`group_id` = `groups`.`id` WHERE `users`.`id` = ?;'; // older
+            let sqlStaff = 'SELECT `groups`.`id`, `groups`.`name` from `groups`;'; // staff
 
+            let currentSQL;
 
-            let sql = 'select * from users'
-        } catch {
+            if (decoded.role === "staff") {
+                currentSQL = sqlStaff
+            } else if (decoded.role === "tutor") {
+                currentSQL = sqlTutor;
+            } else if (decoded.role === "older") {
+                currentSQL = sqlOlder;
+            } else {
+                return res.status(500).json({
+                    message: "Ошибка базы данных. Отсутствует роль пользователя.",
+                });
+            }
 
+            db_pool.query(currentSQL, [decoded.user_id], (err, result) => {
+                if (err) {
+                    return res.status(500).json({
+                        message: err.message
+                    })
+                }
+
+                return res.json(result);
+            })
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({
+                message: "Ошибка базы данных",
+            });
         }
     }
 
