@@ -139,43 +139,56 @@ class LogbookController {
 
     post_top_logbook = (req, res) => {
         try {
-        if (everyFiled(["group_id", "type_log", "day"], res)) {
-            return res.status(400).json({
-                name: "None felids",
-                message: "Some felid not send"
-            })
-        }
-
-        let sql = "SELECT COUNT(*) as count_logs, students.id, students.fullname FROM logbook JOIN students on logbook.students_id = students.id JOIN schedule ON logbook.schedule_id = schedule.id WHERE ( schedule.date_lesson BETWEEN ? AND ? ) AND students.group_id = ? AND logbook.type_log = ? GROUP BY logbook.students_id ORDER BY count_logs;";
-
-        let week = getMondayAndSunday(req.body.day);
-
-        let values = [
-            week.monday,
-            week.sunday,
-            req.body.group_id,
-            req.body.type_log
-        ];
-        
-        let callback = (err, result) => {
-            if (err) {
-                return res.status(500).json({
-                    name: err.name,
-                    message: err.message
+            if (everyFiled(["group_id", "type_log", "day"], res)) {
+                return res.status(400).json({
+                    name: "None felids",
+                    message: "Some felid not send"
                 })
             }
 
-            res.json(result);            
-        }
+            let sql = "SELECT COUNT(*) as count_logs, students.id, students.fullname FROM logbook JOIN students on logbook.students_id = students.id JOIN schedule ON logbook.schedule_id = schedule.id WHERE ( schedule.date_lesson BETWEEN ? AND ? ) AND students.group_id = ? AND logbook.type_log = ? GROUP BY logbook.students_id ORDER BY count_logs;";
 
-        db_pool.query(sql, values, callback);
-            
+            let week = getMondayAndSunday(req.body.day);
+
+            let values = [
+                week.monday,
+                week.sunday,
+                req.body.group_id,
+                req.body.type_log
+            ];
+
+            let callback = (err, result) => {
+                if (err) {
+                    return res.status(500).json({
+                        name: err.name,
+                        message: err.message
+                    })
+                }
+
+                res.json(result);
+            }
+
+            db_pool.query(sql, values, callback);
+
         } catch (error) {
             return res.status(500).json({
                 message: "Server error"
             });
         }
     }
+
+    // get_percent_logs_by_week = (req, res) => {
+    //     if (everyFiled(["group_id", "day"], res)) {
+    //         return res.status(400).json({
+    //             name: "None felids",
+    //             message: "Some felid not send"
+    //         })
+    //     }
+
+    //     let sql = "SELECT COUNT(*) as count_logs, students.id, students.fullname FROM logbook JOIN students on logbook.students_id = students.id JOIN schedule ON logbook.schedule_id = schedule.id WHERE ( schedule.date_lesson BETWEEN ? AND ? ) AND students.group_id = ? AND logbook.type_log = ? GROUP BY logbook.students_id ORDER BY count_logs;";
+
+    //     let week = getMondayAndSunday(req.body.day);
+    // }
 
 }
 

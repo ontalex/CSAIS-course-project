@@ -62,12 +62,45 @@ class AuthController {
                     });
                 }
 
-                res.json({
-                    accept: true,
-                    message: "Токен действителен",
-                    role: jwt.decode(token, process.env.SECRET_KEY).role,
-                    token: token
-                });
+                let decoded = jwt.decode(token, process.env.SECRET_KEY);
+
+                let sqlTutor = 'SELECT `groups`.`id`, `groups`.`name` FROM `users` JOIN `groups` ON `users`.`teachers_id` = `groups`.`tutor_id` WHERE `users`.`id` = ? LIMIT 1;'; // teachers
+                let sqlOlder = 'SELECT `groups`.`id`, `groups`.`name` FROM `users` JOIN `students` ON `users`.`students_id` = `students`.`id` JOIN `groups` on `students`.`group_id` = `groups`.`id` WHERE `users`.`id` = ? LIMIT 1;'; // older
+                let sqlStaff = 'SELECT `groups`.`id`, `groups`.`name` from `groups` LIMIT 1;'; // staff
+
+                let currentSQL;
+
+                if (decoded.role === "staff") {
+                    currentSQL = sqlStaff
+                } else if (decoded.role === "tutor") {
+                    currentSQL = sqlTutor;
+                } else if (decoded.role === "older") {
+                    currentSQL = sqlOlder;
+                } else {
+                    return res.status(500).json({
+                        message: "Ошибка базы данных. Отсутствует роль пользователя.",
+                    });
+                }
+
+                db_pool.query(currentSQL, [decoded.user_id], (err, result) => {
+                    if (err) {
+                        return res.status(500).json({
+                            message: err.message
+                        })
+                    }
+
+                    console.log(result);
+
+                    return res.json({
+                        accept: true,
+                        message: "Токен действителен",
+                        role: decoded.role,
+                        group: result,
+                        token: token
+                    });
+                })
+
+
             });
         } catch (error) {
             console.log(error);

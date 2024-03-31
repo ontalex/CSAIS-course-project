@@ -3,6 +3,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TRQ_token, TRQ_login } from "../../types/csais.types";
 
 export const csaisApi = createApi({
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
     reducerPath: "csais/api",
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:5000/api/v1/',
@@ -40,7 +42,43 @@ export const csaisApi = createApi({
             })
         }),
 
+        studentsGet: build.query({
+            query: (data) => ({
+                url: "students/all",
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                params: {
+                    group_id: data.group_id
+                },
+                "cache": "no-cache"
+            })
+        }),
+
+        studentsAdd: build.mutation({
+            query: (data) => ({
+                url: "students/add",
+                method: "POST",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                body: {
+                    fullname: data.fullname,
+                    phone: data.phone,
+                    email: data.email,
+                    group_id: data.group_id,
+                }
+            })
+        })
+
     })
 })
 
-export const { useAuthMutation, useAuthTokenMutation } = csaisApi;
+export const {
+    useStudentsGetQuery,
+    useStudentsAddMutation,
+    useAuthMutation,
+    useAuthTokenMutation,
+    useAccessesGroupsQuery
+} = csaisApi;

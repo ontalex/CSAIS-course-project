@@ -4,10 +4,10 @@ import { emailCheck, everyFiled, phoneCheck } from "../../helpers/validators.js"
 class StudentControllers {
     get_all_students = (req, res) => {
 
-        let sql = `select * from students where group_id = ?;`;
+        let sql = `select students.id, students.fullname, students.phone, students.email, students.group_id, users.isactive from students left join users on students.id = users.students_id where students.group_id = ?;`;
         let value = [Number(req.query.group_id)];
-        
-        if (everyFiled(value, res)) {
+
+        if (everyFiled(["group_id"], req.query)) {
             return res.status(400).json({
                 name: "None felids",
                 message: "Some felid not send"
@@ -31,7 +31,7 @@ class StudentControllers {
     get_one_student = (req, res) => {
         let sql = `select * from students where id = ?;`;
         let value = [req.query.id];
-        
+
         if (everyFiled(value, res)) {
             return res.status(400).json({
                 name: "None felids",
@@ -97,6 +97,8 @@ class StudentControllers {
                 message: "Some felid not send"
             })
         }
+
+        console.log(value);
 
         if (emailCheck(req.body.email) || phoneCheck(req.body.phone)) {
             return res.status(400).json({

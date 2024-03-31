@@ -12,6 +12,7 @@ export const groupSlice = createSlice({
     initialState: init,
     reducers: {
         setGroup: (state, action) => {
+            console.log(" >> SET GROUP - reduser");
             state.groupID = action.payload.groupID;
         }
     }

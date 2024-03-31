@@ -10,7 +10,6 @@ const RequireAuth = ({ children }: T_Props) => {
     const { user, check } = useAuth()
 
     const fromPage = location.state?.from?.pathname || '/admin'
-    // const fromPage = '/admin'
 
     useEffect(() => {
         check(

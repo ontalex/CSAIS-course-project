@@ -1,0 +1,25 @@
+.menu_tables {
+    display: flex;
+    gap: 20px;
+}
+
+.menu_link {
+    border-radius: 25px;
+    padding: 8px 20px;
+    background: #313c4d;
+    box-sizing: border-box;
+    border: 2px solid #313c4d;
+    color: #fff;
+
+    font-weight: 400;
+    font-size: 14px;
+    text-align: center;
+
+    text-decoration: none;
+}
+
+.menu_link:hover {
+    /* border: 2px solid #313c4d; */
+    color: #313c4d;
+    background-color: #0000;
+}
