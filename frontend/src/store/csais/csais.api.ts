@@ -70,12 +70,39 @@ export const csaisApi = createApi({
                     group_id: data.group_id,
                 }
             })
+        }),
+
+        teachersAll: build.query({
+            query: (data) => ({
+                url: "teachers/all",
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+            })
+        }),
+
+        teachersAdd: build.mutation({
+            query: (data) => ({
+                method: "POST",
+                url: "teachers/add",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                body: {
+                    fullname: data.fullname,
+                    phone: data.phone,
+                    email: data.email
+                }
+            })
         })
 
     })
 })
 
 export const {
+    useTeachersAllQuery,
+    useTeachersAddMutation,
     useStudentsGetQuery,
     useStudentsAddMutation,
     useAuthMutation,
