@@ -118,7 +118,19 @@ export const csaisApi = createApi({
                     name: data.name
                 }
             })
-        })
+        }),
+
+        groupsAll: build.query({
+            query: (data) => ({
+                method: "GET",
+                url: "groups/all",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                }
+            })
+        }),
+
+        
 
     })
 })
@@ -130,6 +142,7 @@ export const {
     useLessonsAddMutation,
     useStudentsGetQuery,
     useStudentsAddMutation,
+    useGroupsAllQuery,
     useAuthMutation,
     useAuthTokenMutation,
     useAccessesGroupsQuery
