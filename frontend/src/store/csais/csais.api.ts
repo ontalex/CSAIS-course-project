@@ -130,7 +130,21 @@ export const csaisApi = createApi({
             })
         }),
 
-        
+        groupsAdd: build.mutation({
+            query: (data) => ({
+                method: "POST",
+                url: "groups/add",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                body: {
+                    name: data.name,
+                    date_create: data.date_create,
+                    date_end: data.date_end,
+                    tutor_id: data.tutor_id
+                }
+            })
+        })
 
     })
 })
