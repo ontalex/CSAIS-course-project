@@ -95,6 +95,29 @@ export const csaisApi = createApi({
                     email: data.email
                 }
             })
+        }),
+
+        lessonsAll: build.query({
+            query: (data) => ({
+                method: "GET",
+                url: "lessons/all",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                }
+            })
+        }),
+
+        lessonsAdd: build.mutation({
+            query: (data) => ({
+                method: "POST",
+                url: "lessons/add",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                body: {
+
+                }
+            })
         })
 
     })
@@ -103,6 +126,8 @@ export const csaisApi = createApi({
 export const {
     useTeachersAllQuery,
     useTeachersAddMutation,
+    useLessonsAllQuery,
+    useLessonsAddMutation,
     useStudentsGetQuery,
     useStudentsAddMutation,
     useAuthMutation,
