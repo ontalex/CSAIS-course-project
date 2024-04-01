@@ -6,12 +6,17 @@ import { groupSlice } from '../../store/csais/groupData.slice'
 import { store } from '../../store'
 import React, { useEffect } from 'react'
 
-interface SelectOption {
+interface ISelectOption {
     id: string
     name: string
 }
 
-export default function SelectGroup({ setGroup, group }) {
+interface ISelectGroupProps {
+    setGroup: (id: string) => void
+    group?: string
+}
+
+export default function SelectGroup({ setGroup, group }: ISelectGroupProps) {
     const { user } = useAuth()
 
     const query = useAccessesGroupsQuery({
@@ -40,7 +45,7 @@ export default function SelectGroup({ setGroup, group }) {
                 <option disabled selected>
                     Доступные группы
                 </option>
-                {query.data?.map((optionObject: SelectOption) => (
+                {query.data?.map((optionObject: ISelectOption) => (
                     <option value={optionObject.id} key={optionObject.id}>
                         {optionObject.name}
                     </option>
