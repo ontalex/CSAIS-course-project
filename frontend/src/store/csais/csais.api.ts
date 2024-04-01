@@ -115,7 +115,7 @@ export const csaisApi = createApi({
                     Authorization: "Bearer " + data.token
                 },
                 body: {
-
+                    name: data.name
                 }
             })
         })

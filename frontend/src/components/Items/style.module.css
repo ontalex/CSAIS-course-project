@@ -1,0 +1,12 @@
+.item {
+    border-radius: 8px;
+    padding: 6px 16px;
+
+    background: #f6f6f6;
+}
+
+.item_name {
+    font-weight: 400;
+    font-size: 16px;
+    color: #000;
+}

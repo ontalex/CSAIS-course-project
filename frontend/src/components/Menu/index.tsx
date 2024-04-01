@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 import st from './menu.module.css'
 import stylejoin from '../../lib/stylejoin'
@@ -35,10 +35,10 @@ export default function Menu() {
         <menu className={st.menu}>
             <ul className={st.list}>
                 {menuItems.map((item) => (
-                    <Link className={st.item} to={item.path} key={item.name}>
+                    <NavLink className={st.item} to={item.path} key={item.name}>
                         <img src={item.icon} alt="" />
                         <p>{item.name}</p>
-                    </Link>
+                    </NavLink>
                 ))}
             </ul>
             <button

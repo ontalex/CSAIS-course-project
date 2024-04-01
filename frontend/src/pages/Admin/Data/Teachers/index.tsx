@@ -6,6 +6,10 @@ import {
     useTeachersAddMutation,
     useTeachersAllQuery,
 } from '../../../../store/csais/csais.api'
+import Button from '../../../../components/Button'
+import TeachersItem from '../../../../components/Items/Teacher'
+
+import list from "../list.module.css";
 
 export default function Teachers() {
     const [isOpen, setIsOpen] = useState(false) // Modal window
@@ -31,7 +35,7 @@ export default function Teachers() {
 
     return (
         <div>
-            <button onClick={() => setIsOpen(true)}>+ добавить</button>
+            <Button onClick={() => setIsOpen(true)}>+ добавить</Button>
 
             <Modal open={isOpen} onClose={() => setIsOpen(false)}>
                 <form onSubmit={handleSubmit}>
@@ -54,13 +58,15 @@ export default function Teachers() {
                 </form>
             </Modal>
 
-            <div>
+            <div className={list.list}>
                 {query.data?.length === 0 && <p>Нету преподавателей</p>}
                 {query.data?.map(
-                    (student: {
+                    (teacher: {
                         id: React.Key | null | undefined
                         fullname: string
-                    }) => <p key={student.id}>{student.fullname}</p>
+                    }) => (
+                        <TeachersItem key={teacher.id} fullname={teacher.fullname} />
+                    )
                 )}
             </div>
         </div>

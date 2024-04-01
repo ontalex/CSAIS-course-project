@@ -8,6 +8,11 @@ import {
     useLessonsAllQuery,
     useLessonsAddMutation,
 } from '../../../../store/csais/csais.api'
+import Button from '../../../../components/Button'
+import LessonsItem from '../../../../components/Items/Lesson'
+
+import st from "./style.module.css";
+import list from "../list.module.css";
 
 export default function Lessons() {
     const [isOpen, setIsOpen] = useState(false) // Modal window
@@ -31,6 +36,7 @@ export default function Lessons() {
 
     return (
         <div>
+            <Button onClick={() => setIsOpen(true)}>+ добавить</Button>
             <Modal open={isOpen} onClose={() => setIsOpen(false)}>
                 <form onSubmit={handleSubmit}>
                     <Input
@@ -38,16 +44,16 @@ export default function Lessons() {
                         name="name"
                         placeholder="Название предмета"
                     />
-                    <button>Сохранить</button>
+                    <Button>Сохранить</Button>
                 </form>
             </Modal>
-            <div>
+            <div className={list.list}>
                 {query.data?.length === 0 && <p>Нету дисциплин</p>}
                 {query.data?.map(
                     (lessons: {
                         id: React.Key | null | undefined
                         name: string
-                    }) => <p key={lessons.id}>{lessons.name}</p>
+                    }) => <LessonsItem key={lessons.id} name={lessons.name} />
                 )}
             </div>
         </div>

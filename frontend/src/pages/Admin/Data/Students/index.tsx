@@ -8,6 +8,10 @@ import {
 import { useAuth } from '../../../../hooks/useAuth'
 import Modal from '../../../../components/Modal'
 import Input from '../../../../components/Input'
+import Button from '../../../../components/Button'
+import StudentsItem from '../../../../components/Items/Student'
+
+import list from "../list.module.css";
 
 export default function Students() {
     const [isOpen, setIsOpen] = useState(false) // Modal window
@@ -38,7 +42,7 @@ export default function Students() {
         <div>
             <SelectGroup group={group} setGroup={setGroup} />
 
-            <button onClick={() => setIsOpen(true)}>+ добавить</button>
+            <Button onClick={() => setIsOpen(true)}>+ добавить</Button>
 
             <Modal open={isOpen} onClose={() => setIsOpen(false)}>
                 <form onSubmit={handleSubmit}>
@@ -61,10 +65,10 @@ export default function Students() {
                 </form>
             </Modal>
 
-            <div>
+            <div className={list.list}>
                 {query.data?.length === 0 && <p>В группе нету студентов</p>}
                 {query.data?.map((student) => (
-                    <p key={student.id}>{student.fullname}</p>
+                    <StudentsItem key={student.id} fullname={student.fullname}/>
                 ))}
             </div>
         </div>

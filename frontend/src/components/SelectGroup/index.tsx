@@ -35,23 +35,20 @@ export default function SelectGroup({ setGroup, group }: ISelectGroupProps) {
     })
 
     return (
-        <>
-            <select
-                className={st.select}
-                id="select_list"
-                value={store.getState().group.groupID}
-                onChange={handlerGroups}
-            >
-                <option disabled selected>
-                    Доступные группы
+        <select
+            className={st.select}
+            id="select_list"
+            value={store.getState().group.groupID}
+            onChange={handlerGroups}
+        >
+            <option disabled selected>
+                Доступные группы
+            </option>
+            {query.data?.map((optionObject: ISelectOption) => (
+                <option value={optionObject.id} key={optionObject.id}>
+                    {optionObject.name}
                 </option>
-                {query.data?.map((optionObject: ISelectOption) => (
-                    <option value={optionObject.id} key={optionObject.id}>
-                        {optionObject.name}
-                    </option>
-                ))}
-            </select>
-            <p>d: {store.getState().group.groupID}</p>
-        </>
+            ))}
+        </select>
     )
 }
