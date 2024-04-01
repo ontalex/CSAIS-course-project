@@ -13,6 +13,7 @@ import LessonsItem from '../../../../components/Items/Lesson'
 
 import st from "./style.module.css";
 import list from "../list.module.css";
+import modal from "../modal.module.css";
 
 export default function Lessons() {
     const [isOpen, setIsOpen] = useState(false) // Modal window
@@ -38,7 +39,7 @@ export default function Lessons() {
         <div>
             <Button onClick={() => setIsOpen(true)}>+ добавить</Button>
             <Modal open={isOpen} onClose={() => setIsOpen(false)}>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className={modal.form}>
                     <Input
                         type="text"
                         name="name"

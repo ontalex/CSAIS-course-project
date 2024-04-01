@@ -10,6 +10,7 @@ import Button from '../../../../components/Button'
 import TeachersItem from '../../../../components/Items/Teacher'
 
 import list from "../list.module.css";
+import modal from "../modal.module.css";
 
 export default function Teachers() {
     const [isOpen, setIsOpen] = useState(false) // Modal window
@@ -38,7 +39,7 @@ export default function Teachers() {
             <Button onClick={() => setIsOpen(true)}>+ добавить</Button>
 
             <Modal open={isOpen} onClose={() => setIsOpen(false)}>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className={modal.form}>
                     <Input
                         type="text"
                         name="fullname"
@@ -54,7 +55,7 @@ export default function Teachers() {
                         name="email"
                         placeholder="Адрес электронной почты"
                     />
-                    <button>Сохранить</button>
+                    <Button>Сохранить</Button>
                 </form>
             </Modal>
 
