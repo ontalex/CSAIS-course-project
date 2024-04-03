@@ -3,10 +3,28 @@
     padding: 6px 16px;
 
     background: #f6f6f6;
+
+    display: flex;
+    justify-content: space-between;
 }
 
 .item_name {
     font-weight: 400;
     font-size: 16px;
     color: #000;
+}
+
+.item_delete {
+    color: red;
+    border: 1px solid red;
+    padding: 6px;
+    border-radius: 4px;
+
+    transition: all 0.3s;
+}
+
+.item_delete:hover {
+    background-color: red;
+    /* font-weight: bold; */
+    color: white;
 }

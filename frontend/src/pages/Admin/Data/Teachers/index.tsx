@@ -5,6 +5,7 @@ import { useAuth } from '../../../../hooks/useAuth'
 import {
     useTeachersAddMutation,
     useTeachersAllQuery,
+    useTeachersDeleteMutation,
 } from '../../../../store/csais/csais.api'
 import Button from '../../../../components/Button'
 import TeachersItem from '../../../../components/Items/Teacher'
@@ -21,6 +22,16 @@ export default function Teachers() {
         token: user.token,
     })
     const [addTeacher, addTeacherRes] = useTeachersAddMutation()
+
+    const [deleteTeacher, deleteTeacherRes] = useTeachersDeleteMutation()
+
+    const handleDelete = (id) => {
+        deleteTeacher({
+            token: user.token,
+            id: id,
+        })
+        query.refetch()
+    }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
@@ -68,7 +79,9 @@ export default function Teachers() {
                     }) => (
                         <TeachersItem
                             key={teacher.id}
+                            id={teacher.id}
                             fullname={teacher.fullname}
+                            delete={handleDelete}
                         />
                     )
                 )}
