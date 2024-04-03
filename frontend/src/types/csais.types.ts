@@ -11,3 +11,6 @@ export type TRQ_answer_auth = {
 export type TRQ_token = {
     token: string
 }
+
+export type T_teacher_option = { id: string, fullname: string };
+export type T_group_card = { id: string, name: string };

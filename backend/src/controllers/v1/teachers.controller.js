@@ -42,11 +42,11 @@ class TeachersControllers {
     }
 
     get_find_teachers = (req, res) => {
-        let sql = `select * from teachers where fullname like '%${req.query.fullname}%';`;
+        let sql = `select * from teachers where fullname like '%${req.body.fullname}%';`;
 
         console.log(sql);
 
-        if (everyFiled([req.query.fullname], res)) {
+        if (everyFiled([req.body.fullname], res)) {
             console.log("Error");
             return res.status(400).json({
                 name: "None felids",

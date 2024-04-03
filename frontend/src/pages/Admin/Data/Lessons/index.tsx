@@ -11,9 +11,9 @@ import {
 import Button from '../../../../components/Button'
 import LessonsItem from '../../../../components/Items/Lesson'
 
-import st from "./style.module.css";
-import list from "../list.module.css";
-import modal from "../modal.module.css";
+import st from './style.module.css'
+import list from '../list.module.css'
+import modal from '../modal.module.css'
 
 export default function Lessons() {
     const [isOpen, setIsOpen] = useState(false) // Modal window

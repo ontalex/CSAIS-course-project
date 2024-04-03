@@ -9,8 +9,8 @@ import {
 import Button from '../../../../components/Button'
 import TeachersItem from '../../../../components/Items/Teacher'
 
-import list from "../list.module.css";
-import modal from "../modal.module.css";
+import list from '../list.module.css'
+import modal from '../modal.module.css'
 
 export default function Teachers() {
     const [isOpen, setIsOpen] = useState(false) // Modal window
@@ -66,7 +66,10 @@ export default function Teachers() {
                         id: React.Key | null | undefined
                         fullname: string
                     }) => (
-                        <TeachersItem key={teacher.id} fullname={teacher.fullname} />
+                        <TeachersItem
+                            key={teacher.id}
+                            fullname={teacher.fullname}
+                        />
                     )
                 )}
             </div>

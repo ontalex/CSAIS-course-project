@@ -1,8 +1,8 @@
-import React from 'react';
-import st from './style.module.css';
+import React from 'react'
+import st from './style.module.css'
 
 export default function Input({
-  ...props
+    ...props
 }: React.InputHTMLAttributes<HTMLInputElement>) {
-  return <input className={st.form_input} {...props} />;
+    return <input className={st.form_input} {...props} />
 }
