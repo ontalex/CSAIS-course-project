@@ -42,7 +42,7 @@ class TeachersControllers {
     }
 
     get_find_teachers = (req, res) => {
-        let sql = `select * from teachers where fullname like '%${req.body.fullname}%';`;
+        let sql = `select fullname from teachers where fullname like '%${req.body.fullname}%';`;
 
         console.log(sql);
 

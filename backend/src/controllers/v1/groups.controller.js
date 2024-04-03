@@ -45,13 +45,13 @@ class GroupsControllers {
         db_pool.query(sql, values, callback);
     }
     post_add_group = (req, res) => {
-        let sql = "insert into `groups` (name, date_create, date_end, tutor_id) value (?, ?, ?, ?)";
+        let sql = "insert into `groups` (name, date_create, date_end, tutor_id) value (?, ?, ?, (select `teachers`.`id` from `teachers` where `teachers`.`fullname` = ? limit 1))";
 
         let values = [
             req.body.name,
             req.body.date_create,
             req.body.date_end,
-            req.body.tutor_id
+            req.body.fullname
         ];
 
         if (everyFiled(values, res)) {
