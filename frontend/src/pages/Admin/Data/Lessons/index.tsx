@@ -7,6 +7,7 @@ import {
     useTeachersAddMutation,
     useLessonsAllQuery,
     useLessonsAddMutation,
+    useLessonsDeleteMutation,
 } from '../../../../store/csais/csais.api'
 import Button from '../../../../components/Button'
 import LessonsItem from '../../../../components/Items/Lesson'
@@ -24,6 +25,7 @@ export default function Lessons() {
         token: user.token,
     })
     const [addLessons, addLessonsRes] = useLessonsAddMutation()
+    const [deleteLessons, deleteLessonsRes] = useLessonsDeleteMutation()
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
@@ -33,6 +35,14 @@ export default function Lessons() {
         })
         query.refetch()
         setIsOpen(false)
+    }
+
+    const handleDelete = (id) => {
+        deleteLessons({
+            token: user.token,
+            id: id,
+        })
+        query.refetch()
     }
 
     return (
@@ -54,7 +64,14 @@ export default function Lessons() {
                     (lessons: {
                         id: React.Key | null | undefined
                         name: string
-                    }) => <LessonsItem key={lessons.id} name={lessons.name} />
+                    }) => (
+                        <LessonsItem
+                            key={lessons.id}
+                            id={lessons.id}
+                            delete={handleDelete}
+                            name={lessons.name}
+                        />
+                    )
                 )}
             </div>
         </div>

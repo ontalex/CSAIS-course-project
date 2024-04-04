@@ -43,9 +43,27 @@ export default function GroupForm({ closeWindow, refetchGruops }) {
 
     return (
         <div className={modal.form}>
-            <Input value={name} onChange={(e) => setName(e.target.value)} name="group" type="text" placeholder="Название группы" />
-            <Input value={date_create} onChange={(e) => setDate_create(e.target.value)} name="date_create" type="date" placeholder="Дата создания" />
-            <Input value={date_end} onChange={(e) => setDate_end(e.target.value)} name="date_end" type="date" placeholder="Дата выпуска" />
+            <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                name="group"
+                type="text"
+                placeholder="Название группы"
+            />
+            <Input
+                value={date_create}
+                onChange={(e) => setDate_create(e.target.value)}
+                name="date_create"
+                type="date"
+                placeholder="Дата создания"
+            />
+            <Input
+                value={date_end}
+                onChange={(e) => setDate_end(e.target.value)}
+                name="date_end"
+                type="date"
+                placeholder="Дата выпуска"
+            />
             <InputDelay
                 callback={findingTeachers}
                 inputing={setTeacherFullname}
@@ -55,10 +73,11 @@ export default function GroupForm({ closeWindow, refetchGruops }) {
                 name="teacherFullname"
                 placeholder="Преподаватель"
             />
-            <p>{teacherFullname}</p>
-            <datalist id='teachers'>
+            <datalist id="teachers">
                 {findTeacherRes.data?.map((teacher) => (
-                    <option key={teacher.fullname} value={teacher.fullname}>{teacher.fullname}</option>
+                    <option key={teacher.fullname} value={teacher.fullname}>
+                        {teacher.fullname}
+                    </option>
                 ))}
             </datalist>
             <Button onClick={handleSubmit}>Сохранить</Button>

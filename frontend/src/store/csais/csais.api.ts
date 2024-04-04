@@ -160,6 +160,19 @@ export const csaisApi = createApi({
             })
         }),
 
+        lessonsDelete: build.mutation({
+            query: (data) => ({
+                method: "DELETE",
+                url: "lessons/delete",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                params: {
+                    id: data.id
+                }
+            })
+        }),
+
         groupsAll: build.query({
             query: (data) => ({
                 method: "GET",
@@ -184,6 +197,19 @@ export const csaisApi = createApi({
                     fullname: data.fullname
                 }
             })
+        }),
+
+        groupsDelete: build.mutation({
+            query: (data) => ({
+                method: "DELETE",
+                url: "groups/delete",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                params: {
+                    id: data.id
+                }
+            })
         })
 
     })
@@ -194,13 +220,19 @@ export const {
     useTeachersAddMutation,
     useTeachersFindMutation,
     useTeachersDeleteMutation,
+
     useLessonsAllQuery,
     useLessonsAddMutation,
+    useLessonsDeleteMutation,
+
     useStudentsGetQuery,
     useStudentsAddMutation,
     useStudentsDeleteMutation,
+
     useGroupsAllQuery,
     useGroupsAddMutation,
+    useGroupsDeleteMutation,
+
     useAuthMutation,
     useAuthTokenMutation,
     useAccessesGroupsQuery
