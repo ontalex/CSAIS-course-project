@@ -3,6 +3,7 @@ import SelectGroup from '../../../../components/SelectGroup'
 import { store } from '../../../../store'
 import {
     useStudentsAddMutation,
+    useStudentsDeleteMutation,
     useStudentsGetQuery,
 } from '../../../../store/csais/csais.api'
 import { useAuth } from '../../../../hooks/useAuth'
@@ -11,8 +12,8 @@ import Input from '../../../../components/Input'
 import Button from '../../../../components/Button'
 import StudentsItem from '../../../../components/Items/Student'
 
-import list from "../list.module.css";
-import modal from "../modal.module.css";
+import list from '../list.module.css'
+import modal from '../modal.module.css'
 
 export default function Students() {
     const [isOpen, setIsOpen] = useState(false) // Modal window
@@ -25,6 +26,7 @@ export default function Students() {
         group_id: group,
     })
     const [addStudent, addStudentRes] = useStudentsAddMutation()
+    const [deleteStudent, deleteStudentRes] = useStudentsDeleteMutation()
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
@@ -36,6 +38,14 @@ export default function Students() {
             group_id: group,
         })
         setIsOpen(false)
+        query.refetch()
+    }
+
+    const handleDelete = (id) => {
+        deleteStudent({
+            token: user.token,
+            id: id,
+        })
         query.refetch()
     }
 
@@ -69,7 +79,12 @@ export default function Students() {
             <div className={list.list}>
                 {query.data?.length === 0 && <p>В группе нету студентов</p>}
                 {query.data?.map((student) => (
-                    <StudentsItem key={student.id} fullname={student.fullname}/>
+                    <StudentsItem
+                        key={student.id}
+                        id={student.id}
+                        fullname={student.fullname}
+                        delete={handleDelete}
+                    />
                 ))}
             </div>
         </div>

@@ -162,10 +162,10 @@ class StudentControllers {
 
         let value = [req.query.id];
 
-        if (emailCheck(req.body.email) && phoneCheck(req.body.phone)) {
+        if (everyFiled(value, res)) {
             return res.status(400).json({
-                name: "Error format",
-                message: "Some felid has no good format"
+                name: "None felids",
+                message: "Some felid not send"
             })
         }
 

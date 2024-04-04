@@ -72,6 +72,19 @@ export const csaisApi = createApi({
             })
         }),
 
+        studentsDelete: build.mutation({
+            query: (data) => ({
+                url: "students/delete",
+                method: "DELETE",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                params: {
+                    id: data.id
+                }
+            })
+        }),
+
         teachersAll: build.query({
             query: (data) => ({
                 url: "teachers/all",
@@ -185,6 +198,7 @@ export const {
     useLessonsAddMutation,
     useStudentsGetQuery,
     useStudentsAddMutation,
+    useStudentsDeleteMutation,
     useGroupsAllQuery,
     useGroupsAddMutation,
     useAuthMutation,
