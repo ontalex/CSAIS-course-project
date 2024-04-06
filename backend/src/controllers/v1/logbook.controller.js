@@ -1,5 +1,5 @@
 import { db_pool } from "../../helpers/database.js";
-import { getMondayAndSunday } from "../../helpers/helpers.js";
+import helpers, { getMondayAndSunday } from "../../helpers/helpers.js";
 import { everyFiled } from "../../helpers/validators.js"
 
 let check_have_logbook = (values, res) => {
@@ -32,7 +32,7 @@ class LogbookController {
 
         // date format: YYYY-MM-DD
         let values = [req.body.date, req.body.number_lesson];
-        if (everyFiled(values, res)) {
+        if (validators.everyFiled(values, res)) {
             return res.status(400).json({
                 name: "None felids",
                 message: "Some felid not send"
@@ -60,7 +60,7 @@ class LogbookController {
             req.body.student_id
         ];
 
-        if (everyFiled(values, res)) {
+        if (validators.everyFiled(values, res)) {
             return res.status(400).json({
                 name: "None felids",
                 message: "Some felid not send"
@@ -96,7 +96,7 @@ class LogbookController {
             req.body.type_log,
             req.query.id
         ];
-        if (everyFiled(values, res)) {
+        if (validators.everyFiled(values, res)) {
             return res.status(400).json({
                 name: "None felids",
                 message: "Some felid not send"
@@ -118,7 +118,7 @@ class LogbookController {
     delete_logbook = (req, res) => {
         let sql = 'delete from `logbook` where `logbook`.`id` = ?;';
         let values = [req.query.id];
-        if (everyFiled(values, res)) {
+        if (validators.everyFiled(values, res)) {
             return res.status(400).json({
                 name: "None felids",
                 message: "Some felid not send"
@@ -139,7 +139,7 @@ class LogbookController {
 
     post_top_logbook = (req, res) => {
         try {
-            if (everyFiled(["group_id", "type_log", "day"], res)) {
+            if (validators.everyFiled(["group_id", "type_log", "day"], res)) {
                 return res.status(400).json({
                     name: "None felids",
                     message: "Some felid not send"
@@ -148,7 +148,7 @@ class LogbookController {
 
             let sql = "SELECT COUNT(*) as count_logs, students.id, students.fullname FROM logbook JOIN students on logbook.students_id = students.id JOIN schedule ON logbook.schedule_id = schedule.id WHERE ( schedule.date_lesson BETWEEN ? AND ? ) AND students.group_id = ? AND logbook.type_log = ? GROUP BY logbook.students_id ORDER BY count_logs;";
 
-            let week = getMondayAndSunday(req.body.day);
+            let week = helpers.getMondayAndSunday(req.body.day);
 
             let values = [
                 week.monday,
@@ -178,7 +178,7 @@ class LogbookController {
     }
 
     // get_percent_logs_by_week = (req, res) => {
-    //     if (everyFiled(["group_id", "day"], res)) {
+    //     if (validators.everyFiled(["group_id", "day"], res)) {
     //         return res.status(400).json({
     //             name: "None felids",
     //             message: "Some felid not send"
@@ -187,7 +187,7 @@ class LogbookController {
 
     //     let sql = "SELECT COUNT(*) as count_logs, students.id, students.fullname FROM logbook JOIN students on logbook.students_id = students.id JOIN schedule ON logbook.schedule_id = schedule.id WHERE ( schedule.date_lesson BETWEEN ? AND ? ) AND students.group_id = ? AND logbook.type_log = ? GROUP BY logbook.students_id ORDER BY count_logs;";
 
-    //     let week = getMondayAndSunday(req.body.day);
+    //     let week = helpers.getMondayAndSunday(req.body.day);
     // }
 
 }

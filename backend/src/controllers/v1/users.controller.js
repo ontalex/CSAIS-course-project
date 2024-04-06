@@ -1,7 +1,7 @@
 import bcryptjs from "bcryptjs";
 import dotenv from "dotenv";
 
-import { get_random_string } from "../../helpers/data_generation.js";
+import data_generation, { get_random_string } from "../../helpers/data_generation.js";
 import { everyFiled } from "../../helpers/validators.js";
 import { db_pool } from "../../helpers/database.js";
 
@@ -9,12 +9,12 @@ dotenv.config();
 
 class UsersControllers {
     get_all_users = (req, res) => {
-        let sql      = 'select * from `users`;';
-        let value    = [];
+        let sql = 'select * from `users`;';
+        let value = [];
         let callback = (err, result) => {
             if (err) {
                 res.status(500).json({
-                    name   : err.name,
+                    name: err.name,
                     message: err.message
                 })
             }
@@ -26,14 +26,14 @@ class UsersControllers {
 
     get_users_self = (req, res) => {
 
-        let sql    = 'select * from `users` where `users`.`id` = ?;';
+        let sql = 'select * from `users` where `users`.`id` = ?;';
         let values = [
             req.user.user_id
         ];
 
-        if (everyFiled(values)) {
+        if (validators.everyFiled(values)) {
             return res.status(400).json({
-                name   : "None felids",
+                name: "None felids",
                 message: "Some felid not send"
             })
         }
@@ -42,7 +42,7 @@ class UsersControllers {
 
             if (err) {
                 res.status(500).json({
-                    name   : err.name,
+                    name: err.name,
                     message: err.message
                 })
             }
@@ -58,43 +58,43 @@ class UsersControllers {
 
         let sql, value;
 
-        if (everyFiled([
+        if (validators.everyFiled([
             req.body.type,
             req.body.login,
             req.body.rule_id
         ])) {
             return res.status(400).json({
-                name   : "None felids",
+                name: "None felids",
                 message: "Some felid not send"
             })
         }
 
-        let pass = get_random_string(5);
+        let pass = data_generation.get_random_string(5);
 
         if (["older"].includes(req.body.type)) {
-            sql   = 'insert into `users` (login, password, secret_key, students_id, roles_id) value (?, ?, ?, ?, ?);';
+            sql = 'insert into `users` (login, password, secret_key, students_id, roles_id) value (?, ?, ?, ?, ?);';
             value = [
                 req.body.login,
                 bcryptjs.hashSync(pass, parseInt(process.env.SALT)),
-                get_random_string(36),
+                data_generation.get_random_string(36),
                 req.body.students_id,
                 req.body.rule_id
             ]
         } else if (["tutor"].includes(req.body.type)) {
-            sql   = 'insert into `users` (login, password, secret_key, teachers_id, roles_id) value (?, ?, ?, ?, ?);'
+            sql = 'insert into `users` (login, password, secret_key, teachers_id, roles_id) value (?, ?, ?, ?, ?);'
             value = [
                 req.body.login,
                 bcryptjs.hashSync(pass, parseInt(process.env.SALT)),
-                get_random_string(36),
+                data_generation.get_random_string(36),
                 req.body.teachers_id,
                 req.body.rule_id
             ]
         } else {
-            sql   = 'insert into `users` (login, password, secret_key, roles_id) value (?, ?, ?, ?);'
+            sql = 'insert into `users` (login, password, secret_key, roles_id) value (?, ?, ?, ?);'
             value = [
                 req.body.login,
                 bcryptjs.hashSync(pass, parseInt(process.env.SALT)),
-                get_random_string(36),
+                data_generation.get_random_string(36),
                 req.body.rule_id
             ]
         }
@@ -103,7 +103,7 @@ class UsersControllers {
         let callback = (err, result) => {
             if (err) {
                 res.status(500).json({
-                    name   : err.name,
+                    name: err.name,
                     message: err.message
                 })
             }
@@ -114,12 +114,12 @@ class UsersControllers {
     }
 
     put_update_user = (req, res) => {
-        let sql      = 'update `users` set ';
-        let value    = [];
+        let sql = 'update `users` set ';
+        let value = [];
         let callback = (err, result) => {
             if (err) {
                 res.status(500).json({
-                    name   : err.name,
+                    name: err.name,
                     message: err.message
                 })
             }
@@ -130,12 +130,12 @@ class UsersControllers {
     }
 
     delete_user = (req, res) => {
-        let sql      = 'delete from `users` where id = ?';
-        let value    = [req.query.id];
+        let sql = 'delete from `users` where id = ?';
+        let value = [req.query.id];
         let callback = (err, result) => {
             if (err) {
                 res.status(500).json({
-                    name   : err.name,
+                    name: err.name,
                     message: err.message
                 })
             }

@@ -16,11 +16,11 @@ class RolesController {
         }
         db_pool.query(sql, callback);
     }
-    
+
     post_add_role = (req, res) => {
         let sql = "insert into `roles` (name) value (?)";
         let values = [req.body.name];
-        if (everyFiled(values, res)) {
+        if (validators.everyFiled(values, res)) {
             return res.status(400).json({
                 name: "None felids",
                 message: "Some felid not send"
@@ -38,11 +38,11 @@ class RolesController {
         }
         db_pool.query(sql, values, callback);
     }
-    
+
     put_update_role = (req, res) => {
         let sql = "update `roles` set name = ? where id = ?;";
         let values = [req.body.name, req.query.id];
-        if (everyFiled(values, res)) {
+        if (validators.everyFiled(values, res)) {
             return res.status(400).json({
                 name: "None felids",
                 message: "Some felid not send"
@@ -64,7 +64,7 @@ class RolesController {
     delete_role = (req, res) => {
         let sql = "delete from `roles` where id = ?;";
         let values = [req.query.id];
-        if (everyFiled(values, res)) {
+        if (validators.everyFiled(values, res)) {
             return res.status(400).json({
                 name: "None felids",
                 message: "Some felid not send"

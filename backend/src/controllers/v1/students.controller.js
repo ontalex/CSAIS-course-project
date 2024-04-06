@@ -1,5 +1,5 @@
 import { db_pool } from "../../helpers/database.js";
-import { emailCheck, everyFiled, phoneCheck } from "../../helpers/validators.js";
+import validators, { emailCheck, everyFiled, validators.phoneCheck } from "../../helpers/validators.js";
 
 class StudentControllers {
     get_all_students = (req, res) => {
@@ -7,7 +7,7 @@ class StudentControllers {
         let sql = `select students.id, students.fullname, students.phone, students.email, students.group_id, users.isactive from students left join users on students.id = users.students_id where students.group_id = ?;`;
         let value = [Number(req.query.group_id)];
 
-        if (everyFiled(["group_id"], req.query)) {
+        if (validators.everyFiled(["group_id"], req.query)) {
             return res.status(400).json({
                 name: "None felids",
                 message: "Some felid not send"
@@ -32,7 +32,7 @@ class StudentControllers {
         let sql = `select * from students where id = ?;`;
         let value = [req.query.id];
 
-        if (everyFiled(value, res)) {
+        if (validators.everyFiled(value, res)) {
             return res.status(400).json({
                 name: "None felids",
                 message: "Some felid not send"
@@ -59,7 +59,7 @@ class StudentControllers {
             req.query.group_id
         ];
 
-        if (everyFiled([req.query.fullname, ...value], res)) {
+        if (validators.everyFiled([req.query.fullname, ...value], res)) {
             console.log(Error);
             return res.status(400).json({
                 name: "None felids",
@@ -91,7 +91,7 @@ class StudentControllers {
             req.body.group_id,
         ];
 
-        if (everyFiled(value, res)) {
+        if (validators.everyFiled(value, res)) {
             return res.status(400).json({
                 name: "None felids",
                 message: "Some felid not send"
@@ -100,7 +100,7 @@ class StudentControllers {
 
         console.log(value);
 
-        if (emailCheck(req.body.email) || phoneCheck(req.body.phone)) {
+        if (validators.emailCheck(req.body.email) || validators.phoneCheck(req.body.phone)) {
             return res.status(400).json({
                 name: "Error format",
                 message: "Some felid has no good format"
@@ -130,14 +130,14 @@ class StudentControllers {
             req.query.id
         ];
 
-        if (everyFiled(value, res)) {
+        if (validators.everyFiled(value, res)) {
             return res.status(400).json({
                 name: "None felids",
                 message: "Some felid not send"
             })
         }
 
-        if (emailCheck(req.body.email) || phoneCheck(req.body.phone)) {
+        if (validators.emailCheck(req.body.email) || validators.phoneCheck(req.body.phone)) {
             return res.status(400).json({
                 name: "Error format",
                 message: "Some felid has no good format"
@@ -162,7 +162,7 @@ class StudentControllers {
 
         let value = [req.query.id];
 
-        if (everyFiled(value, res)) {
+        if (validators.everyFiled(value, res)) {
             return res.status(400).json({
                 name: "None felids",
                 message: "Some felid not send"

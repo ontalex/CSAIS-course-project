@@ -1,5 +1,5 @@
 import { db_pool } from "../../helpers/database.js";
-import { emailCheck, everyFiled, phoneCheck } from "../../helpers/validators.js";
+import { emailCheck, everyFiled, validators.phoneCheck } from "../../helpers/validators.js";
 
 class TeachersControllers {
     get_all_teachers = (req, res) => {
@@ -21,7 +21,7 @@ class TeachersControllers {
         let sql = `select * from teachers where id = ?;`;
         let value = [req.query.id];
 
-        if (everyFiled(value, res)) {
+        if (validators.everyFiled(value, res)) {
             return res.status(400).json({
                 name: "None felids",
                 message: "Some felid not send"
@@ -46,7 +46,7 @@ class TeachersControllers {
 
         console.log(sql);
 
-        if (everyFiled([req.body.fullname], res)) {
+        if (validators.everyFiled([req.body.fullname], res)) {
             console.log("Error");
             return res.status(400).json({
                 name: "None felids",
@@ -77,14 +77,14 @@ class TeachersControllers {
             req.body.email,
         ];
 
-        if (everyFiled(value, res)) {
+        if (validators.everyFiled(value, res)) {
             return res.status(400).json({
                 name: "None felids",
                 message: "Some felid not send"
             })
         }
 
-        if (emailCheck(req.body.email) || phoneCheck(req.body.phone)) {
+        if (validators.emailCheck(req.body.email) || validators.phoneCheck(req.body.phone)) {
             return res.status(400).json({
                 name: "Error format",
                 message: "Some felid has no good format"
@@ -113,14 +113,14 @@ class TeachersControllers {
             req.query.id
         ];
 
-        if (everyFiled(value, res)) {
+        if (validators.everyFiled(value, res)) {
             return res.status(400).json({
                 name: "None felids",
                 message: "Some felid not send"
             })
         }
 
-        if (emailCheck(req.body.email) || phoneCheck(req.body.phone)) {
+        if (validators.emailCheck(req.body.email) || validators.phoneCheck(req.body.phone)) {
             return res.status(400).json({
                 name: "Error format",
                 message: "Some felid has no good format"
