@@ -1,6 +1,6 @@
 import { db_pool } from "../../helpers/database.js";
-import helpers, { getMondayAndSunday } from "../../helpers/helpers.js";
-import { everyFiled } from "../../helpers/validators.js"
+import helpers from "../../helpers/helpers.js";
+import validators from "../../helpers/validators.js";
 
 let check_have_logbook = (values, res) => {
     let sql = 'select * from `logbook` join `schedule` on `logbook`.`lessons_id`= `schedule`.`id` where `schedule`.`date_lesson` = ? and `schedule`.`number_lesson` = ?;'

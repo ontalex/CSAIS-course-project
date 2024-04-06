@@ -1,5 +1,5 @@
 import { db_pool } from "../../helpers/database.js";
-import { emailCheck, everyFiled, validators.phoneCheck } from "../../helpers/validators.js";
+import validators from "../../helpers/validators.js";
 
 class TeachersControllers {
     get_all_teachers = (req, res) => {

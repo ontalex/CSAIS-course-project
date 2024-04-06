@@ -1,5 +1,5 @@
 import { db_pool } from "../../helpers/database.js";
-import { everyFiled } from "../../helpers/validators.js";
+import validators from "../../helpers/validators.js";
 
 class RolesController {
     get_all_roles = (req, res) => {

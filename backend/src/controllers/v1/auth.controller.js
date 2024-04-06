@@ -1,5 +1,5 @@
 import { db_pool } from "../../helpers/database.js";
-import { generate_access_token } from "../../helpers/data_generation.js";
+import data_generation from "../../helpers/data_generation.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -35,7 +35,7 @@ class AuthController {
             return res.status(401).json({ message: "Неверный пароль" });
         }
 
-        let token = generate_access_token(user.id, user.role);
+        let token = data_generation.generate_access_token(user.id, user.role);
 
         console.log(user.role);
 
