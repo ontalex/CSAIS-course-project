@@ -113,7 +113,7 @@ class ScheduleController {
     }
 
     delete_schedule = (req, res) => {
-        let sql_schedule = "delate from `schedule` where `schedule`.`id` = ?;";
+        let sql_schedule = "delete from `schedule` where `schedule`.`id` = ?;";
         let values_schedule = [req.query.id];
         if (validators.everyFiled(values_schedule, res)) {
             return res.status(400).json({
@@ -123,11 +123,16 @@ class ScheduleController {
         }
         let callback_schedule = (err) => {
             if (err) {
-                res.status(500).json({
+                return res.status(500).json({
                     name: err.name,
                     message: err.message
                 })
             }
+
+            return res.json({
+                name: "Complete",
+                message: "Schedule item deleted"
+            })
         }
         db_pool.query(sql_schedule, values_schedule, callback_schedule); // Удаление пары из расписания
     }

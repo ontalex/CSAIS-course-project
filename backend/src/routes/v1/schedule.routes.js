@@ -7,6 +7,6 @@ schedule_routs.get("/all", verifyRole("staff", "tutor", "older"), scheduleContro
 // schedule_routs.get("/find", verifyRole("staff", "tutor", "older"), () => {});
 schedule_routs.post("/add", verifyRole("staff", "tutor", "older"), scheduleController.post_add_schedule);
 schedule_routs.put("/update", verifyRole("staff", "tutor", "older"), () => { });
-schedule_routs.delete("/delete", verifyRole("staff", "tutor", "older"), () => { });
+schedule_routs.delete("/delete", verifyRole("staff", "tutor", "older"), scheduleController.delete_schedule);
 
 export default schedule_routs;
