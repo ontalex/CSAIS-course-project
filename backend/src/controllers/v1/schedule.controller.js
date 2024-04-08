@@ -3,8 +3,8 @@ import validators from "../../helpers/validators.js";
 
 class ScheduleController {
     get_date_schedule = (req, res) => {
-        let sql = 'select * from `schedule` where `schedule`.`date_lesson` = ?';
-        let values = [req.query.date_lesson];
+        let sql = 'select `schedule`.`id`, `schedule`.`number_lesson`, `schedule`.`date_lesson`, `schedule`.`group_id`, `lessons`.`name`, `teac_1`.`fullname` as `teacher_first`, `teac_2`.`fullname` as `teacher_second`, `schedule`.`room_first`, `schedule`.`room_second` from `schedule` join `lessons` on `schedule`.`lessons_id` = `lessons`.`id` join `teachers` as `teac_1` on `schedule`.`teachers_id_first` = `teac_1`.`id` left JOIN `teachers` as `teac_2` on `schedule`.`teachers_id_second` = `teac_2`.`id` where `schedule`.`date_lesson` = ? and `schedule`.`group_id` = ?;';
+        let values = [req.query.date_lesson, req.query.group_id];
         if (validators.everyFiled(values, res)) {
             return res.status(400).json({
                 name: "None felids",
