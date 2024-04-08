@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import {
     useScheduleAddMutation,
+    useScheduleDeleteMutation,
     useScheduleGetQuery,
 } from '../../store/csais/csais.api'
 import { IScheduleItem } from '../../types/props.type'
@@ -30,6 +31,8 @@ export const ScheduleView: FC<IScheduleView> = (props) => {
     const [openEdit, setOpenEdit] = useState(false)
     const [openAdd, setOpenAdd] = useState(false)
     const [handLessonNumber, setHandLessonNumber] = useState<number>()
+
+    const [deleteSchedule, deleteScheduleRes] = useScheduleDeleteMutation()
 
     return (
         <div className={st.list}>
@@ -62,9 +65,13 @@ export const ScheduleView: FC<IScheduleView> = (props) => {
                                         setHandLessonNumber(() => number_lesson)
                                         setOpenEdit(true)
                                     }}
-                                    delete={(number_lesson: number): void =>
-                                        console.log('Delete')
-                                    }
+                                    delete={(id: number) => {
+                                        deleteSchedule({
+                                            token: user.token,
+                                            id: id,
+                                        })
+                                        query.refetch()
+                                    }}
                                 />
                             )
                         } else {

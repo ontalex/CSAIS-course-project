@@ -32,3 +32,8 @@ export interface I_Schedule_Add_Send {
     room_second?: string,
     teachers_fullname_second?: string,
 }
+
+export interface I_Schedule_Delete_Send {
+    token: string,
+    id: number | string
+}

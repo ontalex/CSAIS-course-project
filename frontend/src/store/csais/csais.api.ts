@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { TRQ_token, TRQ_login, I_Schedule_Add_Send, I_Schedule_Get_Send } from "../../types/csais.types";
+import { TRQ_token, TRQ_login, I_Schedule_Add_Send, I_Schedule_Get_Send, I_Schedule_Delete_Send } from "../../types/csais.types";
 import { method } from "lodash";
 
 export const csaisApi = createApi({
@@ -260,6 +260,19 @@ export const csaisApi = createApi({
                     teachers_fullname_second: data.teachers_fullname_second
                 }
             })
+        }),
+
+        scheduleDelete: build.mutation({
+            query: (data: I_Schedule_Delete_Send) => ({
+                method: "DELETE",
+                url: "schedule/delete",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                params: {
+                    id: data.id
+                }
+            })
         })
 
     })
@@ -289,5 +302,6 @@ export const {
     useAccessesGroupsQuery,
 
     useScheduleGetQuery,
-    useScheduleAddMutation
+    useScheduleAddMutation,
+    useScheduleDeleteMutation,
 } = csaisApi;

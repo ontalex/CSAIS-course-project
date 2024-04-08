@@ -39,7 +39,7 @@ const ScheduleItem: FC<IScheduleItem> = (props) => {
                     <Button onClick={() => props.openEdit(props.number_lesson)}>
                         <span>Изменить</span>
                     </Button>
-                    <Button onClick={() => props.delete(props.number_lesson)}>
+                    <Button onClick={() => props.delete(props.id)}>
                         <span>Удалить</span>
                     </Button>
                 </div>
