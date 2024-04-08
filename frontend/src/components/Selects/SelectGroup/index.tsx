@@ -1,9 +1,9 @@
 // import React, { useEffect, useState } from 'react'
 import st from './select.module.css'
-import { useAccessesGroupsQuery } from '../../store/csais/csais.api'
-import { useAuth } from '../../hooks/useAuth'
-import { groupSlice } from '../../store/csais/groupData.slice'
-import { store } from '../../store'
+import { useAccessesGroupsQuery } from '../../../store/csais/csais.api'
+import { useAuth } from '../../../hooks/useAuth'
+import { groupSlice } from '../../../store/csais/groupData.slice'
+import { store } from '../../../store'
 import React, { useEffect } from 'react'
 
 interface ISelectOption {

@@ -1,0 +1,27 @@
+.box {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 20px;
+}
+.btn {
+    background-color: #2221;
+    border-radius: 8px;
+    border: 0;
+}
+.wrapper {
+    width: 100%;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: #2221;
+}
+.wrapper_date {
+    font-size: 18px;
+}
+.wrapper_input {
+    border-radius: 4px;
+    padding: 8px;
+    border: 0;
+    background-color: white;
+    color: black;
+}

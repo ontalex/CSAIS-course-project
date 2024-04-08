@@ -1,13 +1,13 @@
 // import { debounce } from 'lodash'
 import React, { useState } from 'react'
-import { useAuth } from '../../hooks/useAuth'
+import { useAuth } from '../../../hooks/useAuth'
 import {
     useTeachersFindMutation,
     useGroupsAddMutation,
-} from '../../store/csais/csais.api'
-import Button from '../Button'
-import Input from '../Input'
-import InputDelay from '../InputDelay'
+} from '../../../store/csais/csais.api'
+import Button from '../../Button'
+import Input from '../../Input'
+import InputDelay from '../../InputDelay'
 
 import modal from './modal.module.css'
 
@@ -19,7 +19,7 @@ export default function GroupForm({ closeWindow, refetchGruops }) {
     const [date_end, setDate_end] = useState('')
 
     const [findTeacher, findTeacherRes] = useTeachersFindMutation()
-    const [addGroup, addGroupRes] = useGroupsAddMutation()
+    // const [addGroup, addGroupRes] = useGroupsAddMutation()
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()

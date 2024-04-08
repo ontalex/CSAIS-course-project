@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Header from '../../../components/Header'
 import MainWrapper from '../../../components/MainWrapper'
-import SelectGroup from '../../../components/SelectGroup'
+import SelectGroup from '../../../components/Selects/SelectGroup'
 import { store } from '../../../store'
 
 export default function Home() {

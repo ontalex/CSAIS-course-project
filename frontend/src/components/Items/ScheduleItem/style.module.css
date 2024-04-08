@@ -1,0 +1,62 @@
+.item {
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, 0.15);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: #313c4d;
+
+    padding: 12px 16px;
+}
+
+.header p {
+    font-weight: 500;
+    font-size: 14px;
+    color: #fff;
+    margin: 0;
+}
+
+.main {
+    padding: 12px;
+    display: grid;
+    grid-template-columns: 1fr min-content;
+    gap: 16px;
+}
+
+.info {
+}
+.lesson {
+    /* margin: 0; */
+    font-size: 18px;
+}
+
+.groups {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 6px;
+
+    background-color: #313c4d0e;
+}
+
+.group p {
+    margin: 0;
+}
+
+.btns {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}

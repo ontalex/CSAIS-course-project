@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { TRQ_token, TRQ_login } from "../../types/csais.types";
+import { method } from "lodash";
 
 export const csaisApi = createApi({
     refetchOnFocus: true,
@@ -147,6 +148,19 @@ export const csaisApi = createApi({
             })
         }),
 
+        lessonsFind: build.mutation({
+            query: (data) => ({
+                method: "GET",
+                url: "lessons/find",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                params: {
+                    name: data.name
+                }
+            })
+        }),
+
         lessonsAdd: build.mutation({
             query: (data) => ({
                 method: "POST",
@@ -210,6 +224,20 @@ export const csaisApi = createApi({
                     id: data.id
                 }
             })
+        }),
+
+        scheduleGet: build.query({
+            query: (data: { token: string, date_lesson: string, group_id: string }) => ({
+                method: "GET",
+                url: "schedule/all",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                params: {
+                    date_lesson: data.date_lesson,
+                    group_id: data.group_id
+                }
+            })
         })
 
     })
@@ -224,6 +252,7 @@ export const {
     useLessonsAllQuery,
     useLessonsAddMutation,
     useLessonsDeleteMutation,
+    useLessonsFindMutation,
 
     useStudentsGetQuery,
     useStudentsAddMutation,
@@ -235,5 +264,7 @@ export const {
 
     useAuthMutation,
     useAuthTokenMutation,
-    useAccessesGroupsQuery
+    useAccessesGroupsQuery,
+
+    useScheduleGetQuery,
 } = csaisApi;

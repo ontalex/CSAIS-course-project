@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import SelectGroup from '../../../../components/SelectGroup'
+import SelectGroup from '../../../../components/Selects/SelectGroup'
 import { store } from '../../../../store'
 import {
     useStudentsAddMutation,

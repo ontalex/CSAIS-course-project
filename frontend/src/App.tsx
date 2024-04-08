@@ -18,10 +18,11 @@ import Lessons from './pages/Admin/Data/Lessons'
 import Groups from './pages/Admin/Data/Groups'
 import Students from './pages/Admin/Data/Students'
 import Teachers from './pages/Admin/Data/Teachers'
+import React, { Suspense } from 'react'
 
 export default function App() {
     return (
-        <>
+        <Suspense fallback={<p>Загрузка</p>}>
             <AuthProvider>
                 <Routes>
                     <Route path="/" element={<Index />}>
@@ -57,6 +58,6 @@ export default function App() {
                     </Route>
                 </Routes>
             </AuthProvider>
-        </>
+        </Suspense>
     )
 }
