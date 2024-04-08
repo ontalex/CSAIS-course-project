@@ -56,7 +56,7 @@ class AuthController {
 
             jwt.verify(token, process.env.SECRET_KEY, (err) => {
                 if (err) {
-                    res.status(401).json({
+                    return res.status(401).json({
                         accept: false,
                         message: "Недействительный токен авторизации. Пользователь не авторизован.",
                     });
@@ -103,7 +103,6 @@ class AuthController {
 
             });
         } catch (error) {
-            console.log(error);
             return res.status(401).json({
                 accept: false,
                 message: "Пользователь не авторизован.",
