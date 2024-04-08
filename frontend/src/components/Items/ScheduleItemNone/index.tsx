@@ -12,7 +12,7 @@ const timeList = {
 
 interface IScheduleItemNone {
     number_lesson: number
-    onOpenWindow: () => void
+    onOpenWindow: (number_lesson: number) => void
 }
 
 function ScheduleItemNone(props: IScheduleItemNone) {
@@ -27,7 +27,9 @@ function ScheduleItemNone(props: IScheduleItemNone) {
                     <p>Урока нету</p>
                 </div>
                 <div className={st.btns}>
-                    <Button onClick={props.onOpenWindow}>
+                    <Button
+                        onClick={() => props.onOpenWindow(props.number_lesson)}
+                    >
                         <span>Добавить</span>
                     </Button>
                 </div>

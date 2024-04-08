@@ -13,6 +13,6 @@ export interface IScheduleItem {
     room_first: string
     room_second?: string
 
-    openEdit: () => void
-    delete: () => void
+    openEdit: (number_lesson: number) => void
+    delete: (number_lesson: number) => void
 }

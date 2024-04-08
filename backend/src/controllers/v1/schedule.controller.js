@@ -25,13 +25,14 @@ class ScheduleController {
     }
 
     post_add_schedule = (req, res) => {
-        let sql = "insert into `schedule` (date_lesson, room_first, number_lesson, lessons_id, teachers_id_first) value (?, ?, ?, ?, ?)";
+        let sql = "insert into `schedule` (group_id, date_lesson, room_first, number_lesson, lessons_id, teachers_id_first) value (?, ?, ?, ?, (select `lessons`.`id` from `lessons` where `lessons`.`name` like ? limit 1), (SELECT `teachers`.`id` FROM `teachers` WHERE `teachers`.`fullname` LIKE ? LIMIT 1))";
         let values = [
+            req.body.group_id,
             req.query.date_lesson,
             req.body.room_first,
             req.body.number_lesson,
-            req.body.lessons_id,
-            req.body.teachers_id_first
+            req.body.lesson_name,
+            req.body.teachers_fullname_first // замена на ФИО
         ];
         if (validators.everyFiled(values, res)) {
             return res.status(400).json({
@@ -40,9 +41,18 @@ class ScheduleController {
             })
         }
 
-        if (req.body.room_second && req.body.teachers_id_second) {
-            sql = "insert into `schedule` (date_lesson, room_first, number_lesson, lessons_id, teachers_id_first, room_second, teachers_id_second ) value (?, ?, ?, ?, ?, ?, ?)";
-            values = [req.query.date_lesson, req.body.room_first, req.body.number_lesson, req.body.lessons_id, req.body.teachers_id_first, req.body.room_second, req.body.teachers_id_second];
+        if (req.body.room_second && req.body.teachers_fullname_second) {
+            sql = "insert into `schedule` (group_id, date_lesson, room_first, number_lesson, lessons_id, teachers_id_first, room_second, teachers_id_second ) value (?, ?, ?, ?, (select `lessons`.`id` from `lessons` where `lessons`.`name` like ? limit 1), (SELECT `teachers`.`id` FROM `teachers` WHERE `teachers`.`fullname` LIKE ? LIMIT 1), ?, (SELECT `teachers`.`id` FROM `teachers` WHERE `teachers`.`fullname` LIKE ? LIMIT 1))";
+            values = [
+                req.body.group_id,
+                req.query.date_lesson,
+                req.body.room_first,
+                req.body.number_lesson,
+                req.body.lesson_name,
+                req.body.teachers_fullname_first,
+                req.body.room_second,
+                req.body.teachers_fullname_second
+            ];
         }
 
         let callback = (err, result) => {
@@ -59,13 +69,13 @@ class ScheduleController {
     }
 
     put_update_schedule = (req, res) => {
-        let sql = "update `schedule` set `date_lesson` = ?, `room_first` = ?, `number_lesson` = ?, `lessons_id` = ?, `teachers_id_first` = ? where `schedule`.`id` = ?;";
+        let sql = "update `schedule` set `date_lesson` = ?, `room_first` = ?, `number_lesson` = ?, `lessons_id` = (select `lessons`.`id` from `lessons` where `lessons`.`name` like ? limit 1), `teachers_id_first` = (SELECT `teachers`.`id` FROM `teachers` WHERE `teachers`.`fullname` LIKE ? LIMIT 1) where `schedule`.`id` = ?;";
         let values = [
             req.body.date_lesson,
             req.body.room_first,
             req.body.number_lesson,
-            req.body.lessons_id,
-            req.body.teachers_id_first,
+            req.body.lesson_name,
+            req.body.teachers_fullname_first,
             req.query.id
         ];
         if (validators.everyFiled(values, res)) {
@@ -76,15 +86,15 @@ class ScheduleController {
         }
 
         if (req.body.room_second && req.body.teachers_id_second) {
-            sql = "update `schedule` set `date_lesson` = ?, `room_first` = ?, `number_lesson` = ?, `lessons_id` = ?, `teachers_id_first` = ?, `room_second` = ?, `teachers_id_second` = ? where `schedule`.`id` = ?;";
+            sql = "update `schedule` set `date_lesson` = ?, `room_first` = ?, `number_lesson` = ?, `lessons_id` = (select `lessons`.`id` from `lessons` where `lessons`.`name` like ? limit 1), `teachers_id_first` = (SELECT `teachers`.`id` FROM `teachers` WHERE `teachers`.`fullname` LIKE ? LIMIT 1), `room_second` = ?, `teachers_id_second` = (SELECT `teachers`.`id` FROM `teachers` WHERE `teachers`.`fullname` LIKE ? LIMIT 1) where `schedule`.`id` = ?;";
             values = [
                 req.query.date_lesson,
                 req.body.room_first,
                 req.body.number_lesson,
-                req.body.lessons_id,
-                req.body.teachers_id_first,
+                req.body.lesson_name,
+                req.body.teachers_fullname_first,
                 req.body.room_second,
-                req.body.teachers_id_second,
+                req.body.teachers_fullname_second,
                 req.query.id
             ];
         }

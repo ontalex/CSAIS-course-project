@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { TRQ_token, TRQ_login } from "../../types/csais.types";
+import { TRQ_token, TRQ_login, I_Schedule_Add_Send, I_Schedule_Get_Send } from "../../types/csais.types";
 import { method } from "lodash";
 
 export const csaisApi = createApi({
@@ -227,7 +227,7 @@ export const csaisApi = createApi({
         }),
 
         scheduleGet: build.query({
-            query: (data: { token: string, date_lesson: string, group_id: string }) => ({
+            query: (data: I_Schedule_Get_Send) => ({
                 method: "GET",
                 url: "schedule/all",
                 headers: {
@@ -236,6 +236,28 @@ export const csaisApi = createApi({
                 params: {
                     date_lesson: data.date_lesson,
                     group_id: data.group_id
+                }
+            })
+        }),
+
+        scheduleAdd: build.mutation({
+            query: (data: I_Schedule_Add_Send) => ({
+                method: "POST",
+                url: "schedule/add",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                params: {
+                    date_lesson: data.date_lesson
+                },
+                body: {
+                    group_id: data.group_id,
+                    room_first: data.room_first,
+                    number_lesson: data.number_lesson,
+                    lesson_name: data.lesson_name,
+                    teachers_fullname_first: data.teachers_fullname_first,
+                    room_second: data.room_second,
+                    teachers_fullname_second: data.teachers_fullname_second
                 }
             })
         })
@@ -267,4 +289,5 @@ export const {
     useAccessesGroupsQuery,
 
     useScheduleGetQuery,
+    useScheduleAddMutation
 } = csaisApi;

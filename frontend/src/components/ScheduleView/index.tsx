@@ -1,6 +1,9 @@
 import React, { FC, useEffect, useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
-import { useScheduleGetQuery } from '../../store/csais/csais.api'
+import {
+    useScheduleAddMutation,
+    useScheduleGetQuery,
+} from '../../store/csais/csais.api'
 import { IScheduleItem } from '../../types/props.type'
 import ScheduleItem from '../Items/ScheduleItem'
 import useFormateLessons from '../../hooks/useFormateLessons'
@@ -8,6 +11,8 @@ import ScheduleItemNone from '../Items/ScheduleItemNone'
 
 import st from './style.module.css'
 import Modal from '../Modal'
+import InputDelay from '../InputDelay'
+import GroupSchedule from '../Groups/GroupSchedule'
 
 interface IScheduleView {
     date: string
@@ -22,8 +27,9 @@ export const ScheduleView: FC<IScheduleView> = (props) => {
         group_id: props.group,
     })
 
-    let [openEdit, setOpenEdit] = useState(false)
-    let [openAdd, setOpenAdd] = useState(false)
+    const [openEdit, setOpenEdit] = useState(false)
+    const [openAdd, setOpenAdd] = useState(false)
+    const [handLessonNumber, setHandLessonNumber] = useState<number>()
 
     return (
         <div className={st.list}>
@@ -33,6 +39,12 @@ export const ScheduleView: FC<IScheduleView> = (props) => {
 
             <Modal open={openAdd} onClose={() => setOpenAdd(false)}>
                 <h1>Добавить</h1>
+                <GroupSchedule
+                    dateLesson={props.date}
+                    closeWindow={() => setOpenAdd(false)}
+                    refetch={query.refetch}
+                    lessonNumber={handLessonNumber}
+                />
             </Modal>
 
             {!query.isSuccess && <p>Загрузка...</p>}
@@ -45,15 +57,25 @@ export const ScheduleView: FC<IScheduleView> = (props) => {
                                 <ScheduleItem
                                     {...schedule}
                                     key={schedule.id}
-                                    openEdit={() => setOpenEdit(true)}
-                                    delete={() => console.log('Delete')}
+                                    openEdit={(number_lesson: number): void => {
+                                        console.log('Lesson =', number_lesson)
+                                        setHandLessonNumber(() => number_lesson)
+                                        setOpenEdit(true)
+                                    }}
+                                    delete={(number_lesson: number): void =>
+                                        console.log('Delete')
+                                    }
                                 />
                             )
                         } else {
                             return (
                                 <ScheduleItemNone
                                     number_lesson={index + 1}
-                                    onOpenWindow={() => setOpenAdd(true)}
+                                    onOpenWindow={(number_lesson: number) => {
+                                        console.log('Lesson =', number_lesson)
+                                        setHandLessonNumber(() => number_lesson)
+                                        setOpenAdd(true)
+                                    }}
                                 />
                             )
                         }
