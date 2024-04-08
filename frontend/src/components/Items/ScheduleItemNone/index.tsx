@@ -3,7 +3,7 @@ import st from './style.module.css'
 import Button from '../../Button'
 
 const timeList = {
-    '1': '09:00 - 10:30',
+    '1': '9:00 - 10:30',
     '2': '10:50 - 12:20',
     '3': '12:40 - 14:10',
     '4': '14:30 - 16:00',
