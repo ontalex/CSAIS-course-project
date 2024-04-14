@@ -38,7 +38,7 @@ groups_routs.delete(
 groups_routs.get(
     "/accesses",
     verifyRole("staff", "tutor", "older"),
-    authController.accessesGroups
+    authController.accesses_groups
 );
 
 

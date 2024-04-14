@@ -24,6 +24,28 @@ class ScheduleController {
         db_pool.query(sql, values, callback)
     }
 
+    get_date_schedule_min = (req, res) => {
+        let sql = 'select `schedule`.`id`, `schedule`.`number_lesson`, `lessons`.`name` from `schedule` join `lessons` on `schedule`.`lessons_id` = `lessons`.`id` where `schedule`.`date_lesson` = ? and `schedule`.`group_id` = ? ORDER BY `schedule`.`number_lesson`;';
+        let values = [req.query.date_lesson, req.query.group_id];
+        if (validators.everyFiled(values, res)) {
+            return res.status(400).json({
+                name: "None felids",
+                message: "Some felid not send"
+            })
+        }
+        let callback = (err, result) => {
+            if (err) {
+                res.status(500).json({
+                    name: err.name,
+                    message: err.message
+                })
+            }
+
+            res.json(result);
+        }
+        db_pool.query(sql, values, callback)
+    }
+
     post_add_schedule = (req, res) => {
         let sql = "insert into `schedule` (group_id, date_lesson, room_first, number_lesson, lessons_id, teachers_id_first) value (?, ?, ?, ?, (select `lessons`.`id` from `lessons` where `lessons`.`name` like ? limit 1), (SELECT `teachers`.`id` FROM `teachers` WHERE `teachers`.`fullname` LIKE ? LIMIT 1))";
         let values = [

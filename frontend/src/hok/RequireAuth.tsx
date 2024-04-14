@@ -7,7 +7,7 @@ const RequireAuth = ({ children }: T_Props) => {
     const location = useLocation()
     const navigate = useNavigate()
 
-    const { user, check } = useAuth()
+    const { user, check, isAuth } = useAuth()
 
     const fromPage = location.state?.from?.pathname || '/admin'
 
@@ -15,12 +15,10 @@ const RequireAuth = ({ children }: T_Props) => {
         check(
             () => {
                 console.log('Проверка успешна - перенаправление на страницу')
-                // navigate(fromPage)
                 console.log('Require Auth: ', user)
             },
             () => {
                 console.log('Проверка не успешна - перенаправление на страницу')
-                console.log('>> NAV to LOGIN')
                 navigate('/login', { replace: true, state: { from: location } })
                 // return <Navigate to={`../login`} state={{ from: location }} />
             }
@@ -31,10 +29,11 @@ const RequireAuth = ({ children }: T_Props) => {
         console.log('Данные отсутствуют - перенаправление на автризацию', user)
         console.log('>> NAV to LOGIN')
         navigate('/login', { replace: true, state: { from: location } })
-    } else {
-        console.log('Данные есть - перенаправление на страницу', user)
-        return children
     }
+    console.log('Данные есть - перенаправление на страницу', user)
+
+    if (!isAuth) return <p>Загрузка</p>
+    return children
 }
 
 export { RequireAuth }

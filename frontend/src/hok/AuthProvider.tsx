@@ -1,18 +1,22 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { createContext, useState } from 'react'
 import { useAuthMutation, useAuthTokenMutation } from '../store/csais/csais.api'
 import { T_Props } from '../types/props.type'
-import { TRQ_answer_auth } from '../types/csais.types'
+import { TRQ_answer_auth, TRQ_login } from '../types/csais.types'
 import { store } from '../store'
 import { groupSlice } from '../store/csais/groupData.slice'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { SerializedError } from '@reduxjs/toolkit/react'
 
 export const AuthContext = createContext({})
 
 export const AuthProvider = ({ children }: { children: T_Props }) => {
-    const [user, setUser] = useState<TRQ_answer_auth>(undefined)
-    const [signinFetch] = useAuthMutation()
+    const [user, setUser] = useState<TRQ_answer_auth | undefined>(undefined)
+    const [isAuth, setIsAuth] = useState<boolean>(false)
+    const [signinFetch, { error, isError }] = useAuthMutation()
     const [checkFetch] = useAuthTokenMutation()
 
-    const check = (cb, errorCb) => {
+    const check = (cb: () => void, errorCb: () => void) => {
         console.log('First Check: ', {
             local: localStorage.getItem('token'),
             context: user,
@@ -48,34 +52,44 @@ export const AuthProvider = ({ children }: { children: T_Props }) => {
                 console.log('Запрос выполнен. Обработка', data)
 
                 cb()
+                setIsAuth(true)
             })
             .catch((error) => {
                 console.log('Запрос не выполнен. Ошибка', error)
                 errorCb()
+                setIsAuth(false)
             })
     }
-    const signin = (user, cb: () => void, errorCb: (arg: string) => void) => {
+    const signin = (
+        user: TRQ_login,
+        cb: () => void,
+        errorCb: (arg0: { error: any; isError: boolean }) => void
+    ) => {
         signinFetch(user)
-            .then(({ data }) => {
+            .unwrap()
+            .then((data) => {
                 console.log('SignIn data: ', data)
                 setUser(data)
                 localStorage.setItem('token', data.token)
 
                 cb()
+                setIsAuth(true)
             })
             .catch((error) => {
                 console.log('SignIn - Error', error)
-                errorCb(error.message)
+                console.log('SignIn - Error REQ', error)
+                errorCb({ error: error, isError: isError })
             })
     }
 
     const signout = (cb: () => void) => {
         console.log('SignOut')
-        setUser(null)
+        setUser(undefined)
         localStorage.removeItem('token')
         cb()
+        setIsAuth(false)
     }
-    const value = { user, signin, signout, check }
+    const value = { user, signin, signout, check, isAuth, setIsAuth }
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

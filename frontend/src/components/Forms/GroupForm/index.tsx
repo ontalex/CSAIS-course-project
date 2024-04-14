@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { useAuth } from '../../../hooks/useAuth'
 import {
-    useTeachersFindMutation,
+    useTeachersFindMinMutation,
     useGroupsAddMutation,
 } from '../../../store/csais/csais.api'
 import Button from '../../Button'
@@ -18,7 +18,7 @@ export default function GroupForm({ closeWindow, refetchGruops }) {
     const [date_create, setDate_create] = useState('')
     const [date_end, setDate_end] = useState('')
 
-    const [findTeacher, findTeacherRes] = useTeachersFindMutation()
+    const [findTeacher, findTeacherRes] = useTeachersFindMinMutation()
     // const [addGroup, addGroupRes] = useGroupsAddMutation()
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

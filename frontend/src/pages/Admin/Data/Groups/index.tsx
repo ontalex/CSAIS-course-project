@@ -9,7 +9,7 @@ import {
 } from '../../../../store/csais/csais.api'
 import GroupsItem from '../../../../components/Items/Group'
 import { T_group_card } from '../../../../types/csais.types'
-import GroupForm from '../../../../components/Groups/GroupForm'
+import GroupForm from '../../../../components/Forms/GroupForm'
 
 export default function Groups() {
     const [isOpen, setIsOpen] = useState(false) // Modal window

@@ -27,11 +27,9 @@ let check_have_logbook = (values, res) => {
 class LogbookController {
 
     get_lesson_logbook = (req, res) => {
+        let sql = 'select students.id, students.fullname, logbooks.type_log, logbooks.date_update from students LEFT OUTER JOIN ( SELECT * FROM logbook WHERE logbook.schedule_id = ?) as logbooks ON students.id = logbooks.students_id WHERE students.group_id = ? ORDER BY students.fullname;'
 
-        let sql = 'select * from `logbook` join `schedule` on `logbook`.`schedule_id`= `schedule`.`id` where `schedule`.`date_lesson` = ? and `schedule`.`number_lesson` = ?;';
-
-        // date format: YYYY-MM-DD
-        let values = [req.body.date, req.body.number_lesson];
+        let values = [req.query.schedule_id, req.query.group_id];
         if (validators.everyFiled(values, res)) {
             return res.status(400).json({
                 name: "None felids",

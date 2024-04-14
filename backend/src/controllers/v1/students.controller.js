@@ -29,7 +29,7 @@ class StudentControllers {
     }
 
     get_one_student = (req, res) => {
-        let sql = `select * from students where id = ?;`;
+        let sql = 'select `students`.*, `groups`.`name` as `group_name` from `students` JOIN `groups` ON `students`.`group_id` = `groups`.`id` where `students`.`id` = ?;';
         let value = [req.query.id];
 
         if (validators.everyFiled(value, res)) {
@@ -121,12 +121,12 @@ class StudentControllers {
     }
     put_update_student = (req, res) => {
 
-        let sql = `update students set fullname = ?, phone = ?, email = ?, group_id = ? where id = ?;`;
+        let sql = 'update students set fullname = ?, phone = ?, email = ?, group_id = (select `groups`.`id` from `groups` where `groups`.`name` = ? limit 1) where id = ?;';
         let value = [
             req.body.fullname,
             req.body.phone,
             req.body.email,
-            req.body.group_id,
+            req.body.group_name,
             req.query.id
         ];
 

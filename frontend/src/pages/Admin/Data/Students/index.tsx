@@ -14,9 +14,13 @@ import StudentsItem from '../../../../components/Items/Student'
 
 import list from '../list.module.css'
 import modal from '../modal.module.css'
+import InputDelay from '../../../../components/InputDelay'
+import StudentUpdateForm from '../../../../components/Forms/StudentUpdateForm'
 
 export default function Students() {
-    const [isOpen, setIsOpen] = useState(false) // Modal window
+    const [isOpenAdd, setIsOpenAdd] = useState<boolean>(false) // Modal window
+    const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false) // Modal window
+    const [updateStudentID, setUpdateStudentID] = useState<number | undefined>()
 
     const { user } = useAuth()
     const [group, setGroup] = useState(() => store.getState().group.groupID)
@@ -26,9 +30,10 @@ export default function Students() {
         group_id: group,
     })
     const [addStudent, addStudentRes] = useStudentsAddMutation()
+    // const [updateStudent, updateStudentRes] = useStudentsUpdateMutation()
     const [deleteStudent, deleteStudentRes] = useStudentsDeleteMutation()
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmitAdd = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         addStudent({
             token: user.token,
@@ -37,7 +42,7 @@ export default function Students() {
             email: event.target.elements.email.value,
             group_id: group,
         })
-        setIsOpen(false)
+        setIsOpenAdd(false)
         query.refetch()
     }
 
@@ -49,14 +54,29 @@ export default function Students() {
         query.refetch()
     }
 
+    const handleUpdate = (id) => {
+        setUpdateStudentID(id)
+        setIsOpenUpdate(true)
+    }
+
     return (
         <div>
             <SelectGroup group={group} setGroup={setGroup} />
 
-            <Button onClick={() => setIsOpen(true)}>+ добавить</Button>
+            <Button onClick={() => setIsOpenAdd(true)}>+ добавить</Button>
 
-            <Modal open={isOpen} onClose={() => setIsOpen(false)}>
-                <form onSubmit={handleSubmit} className={modal.form}>
+            <Modal open={isOpenUpdate} onClose={() => setIsOpenUpdate(false)}>
+                <h1>Изменить студента</h1>
+                <StudentUpdateForm
+                    setIsOpenUpdate={setIsOpenUpdate}
+                    query={query}
+                    studentID={updateStudentID}
+                />
+            </Modal>
+
+            <Modal open={isOpenAdd} onClose={() => setIsOpenAdd(false)}>
+                <h1>Добавить студента</h1>
+                <form onSubmit={handleSubmitAdd} className={modal.form}>
                     <Input
                         type="text"
                         name="fullname"
@@ -72,20 +92,24 @@ export default function Students() {
                         name="email"
                         placeholder="Адрес электронной почты"
                     />
+
                     <Button>Сохранить</Button>
                 </form>
             </Modal>
 
             <div className={list.list}>
                 {query.data?.length === 0 && <p>В группе нету студентов</p>}
-                {query.data?.map((student) => (
-                    <StudentsItem
-                        key={student.id}
-                        id={student.id}
-                        fullname={student.fullname}
-                        delete={handleDelete}
-                    />
-                ))}
+                {query.isFetching && <p>Загрузка...</p>}
+                {query.isSuccess &&
+                    query.data?.map((student) => (
+                        <StudentsItem
+                            key={student.id}
+                            id={student.id}
+                            fullname={student.fullname}
+                            delete={handleDelete}
+                            update={handleUpdate}
+                        />
+                    ))}
             </div>
         </div>
     )

@@ -4,6 +4,8 @@ import { useState } from 'react'
 import Input from '../../components/Input'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
+import { SerializedError } from '@reduxjs/toolkit'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 // import { useAuthMutation } from '../../store/csais/csais.api'
 // import { TRQ_answer_auth } from '../../types/csais.types'
 
@@ -14,7 +16,7 @@ export function Login() {
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
 
-    const [error, setError] = useState(undefined)
+    const [errorData, setErrorData] = useState()
 
     const { signin } = useAuth()
 
@@ -36,7 +38,8 @@ export function Login() {
                 navigate(location.state?.from?.pathname || '/admin')
             },
             (err) => {
-                setError(err)
+                console.log(err)
+                setErrorData(err)
             }
         )
     }
@@ -53,15 +56,15 @@ export function Login() {
                 </div>
                 <form onSubmit={submitForm} className={st.form}>
                     <h2 className={st.form_span}>Вход в систему</h2>
-                    {error && (
+                    {errorData?.isError && (
                         <p
                             style={{
                                 color: 'red',
-                                fontWeight: 'bold',
                                 textAlign: 'center',
                             }}
                         >
-                            {error}
+                            (Ошибка {errorData.error.status}){' '}
+                            {errorData.error.data?.message}
                         </p>
                     )}
                     <Input

@@ -13,8 +13,8 @@ const init = {
     }
 };
 
-export const groupSlice = createSlice({
-    name: "groupSlice",
+export const scheduleSlice = createSlice({
+    name: "scheduleSlice",
     initialState: init,
     reducers: {
         setDataSchedule: (state, action) => {

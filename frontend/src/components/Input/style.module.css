@@ -1,10 +1,15 @@
 .form_input {
-    width: 100%;
-    border: 1px solid #000;
-    padding: 10px 16px;
-    border-radius: 44px;
+    max-width: 320px;
+    /* width: 100%; */
+
     box-sizing: border-box;
-    font-size: 16px;
+
+    border: 1px solid #000;
+    border-radius: 44px;
+
+    padding: 10px 16px;
+
+    font-size: 14px;
 }
 
 .form_input::placeholder {

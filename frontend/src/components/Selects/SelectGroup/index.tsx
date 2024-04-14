@@ -16,7 +16,7 @@ interface ISelectGroupProps {
     group?: string
 }
 
-export default function SelectGroup({ setGroup, group }: ISelectGroupProps) {
+export default function SelectGroup({ setGroup }: ISelectGroupProps) {
     const { user } = useAuth()
 
     const query = useAccessesGroupsQuery({

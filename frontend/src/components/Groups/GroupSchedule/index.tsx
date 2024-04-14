@@ -4,19 +4,28 @@ import Input from '../../Input'
 import {
     useLessonsFindMutation,
     useScheduleAddMutation,
-    useTeachersFindMutation,
+    useTeachersFindMinMutation,
 } from '../../../store/csais/csais.api'
-import { every } from 'lodash'
 import { useAuth } from '../../../hooks/useAuth'
 import Button from '../../Button'
 import { store } from '../../../store'
+
+import st from './style.module.css'
+import { IAuthContext } from '../../../types/authContext.type'
+
+interface IGroupSchedule {
+    closeWindow: () => void
+    refetch: () => void
+    dateLesson: string
+    lessonNumber: string | number
+}
 
 export default function GroupSchedule({
     closeWindow,
     refetch,
     dateLesson,
     lessonNumber,
-}) {
+}: IGroupSchedule) {
     const { user } = useAuth()
 
     // Данные для отправки
@@ -26,8 +35,10 @@ export default function GroupSchedule({
     const [roomSecond, setRoomSecond] = useState<string | undefined>()
     const [lesson, setLesson] = useState<string>('')
 
+    const [canSend, setCanSend] = useState<boolean>(false)
+
     // API запросы
-    const [findTeacher, findTeacherRes] = useTeachersFindMutation()
+    const [findTeacher, findTeacherRes] = useTeachersFindMinMutation()
     const [findLesson, findLessonRes] = useLessonsFindMutation()
     const [addSchedule, addScheduleRes] = useScheduleAddMutation()
 
@@ -47,8 +58,8 @@ export default function GroupSchedule({
             room_second: roomSecond,
             teachers_fullname_second: teacherSecond,
         })
-        closeWindow()
         refetch()
+        closeWindow()
     }
     const handleCancelSecondGroup = () => {
         setTeacherSecond(undefined)
@@ -69,7 +80,8 @@ export default function GroupSchedule({
     }
 
     return (
-        <div>
+        <div className={st.form}>
+            {addScheduleRes.data}
             <InputDelay
                 name="lesson"
                 list="lessons"
@@ -84,7 +96,7 @@ export default function GroupSchedule({
                     <option key={lesson.name} value={lesson.name} />
                 ))}
             </datalist>
-            <div>
+            <div className={st.form_group}>
                 <Input
                     name="roomFirst"
                     onChange={(event) => setRoomFirst(event.target.value)}
@@ -114,7 +126,7 @@ export default function GroupSchedule({
                     <span>Добавить подгруппу</span>
                 </Button>
             ) : (
-                <div>
+                <div className={st.form_group}>
                     <Input
                         name="roomSecond"
                         onChange={(event) => setRoomSecond(event.target.value)}
@@ -142,7 +154,7 @@ export default function GroupSchedule({
                     </datalist>
                 </div>
             )}
-            <Button onClick={handleAddSchedule}>
+            <Button onClick={handleAddSchedule} disabled={!canSend}>
                 <span>Отправить</span>
             </Button>
         </div>

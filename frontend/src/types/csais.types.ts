@@ -4,7 +4,7 @@ export type TRQ_login = {
 }
 
 export type TRQ_answer_auth = {
-    role: string | undefined | null,
+    role?: string | undefined | null,
     token: string | undefined | null
 }
 

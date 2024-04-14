@@ -12,9 +12,12 @@ import TeachersItem from '../../../../components/Items/Teacher'
 
 import list from '../list.module.css'
 import modal from '../modal.module.css'
+import FormTeacherUpdate from '../../../../components/Forms/FormTeacherUpdate'
 
 export default function Teachers() {
-    const [isOpen, setIsOpen] = useState(false) // Modal window
+    const [isOpenAdd, setIsOpenAdd] = useState(false) // Modal window
+    const [isOpenUpdate, setIsOpenUpdate] = useState(false) // Modal window
+    const [updateTeacherID, setUpdateTeacherID] = useState<number | undefined>()
 
     const { user } = useAuth()
 
@@ -33,6 +36,11 @@ export default function Teachers() {
         query.refetch()
     }
 
+    const handleUpdate = (id) => {
+        setUpdateTeacherID(id)
+        setIsOpenUpdate(true)
+    }
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         addTeacher({
@@ -42,14 +50,14 @@ export default function Teachers() {
             email: event.target.elements.email.value,
         })
         query.refetch()
-        setIsOpen(false)
+        setIsOpenAdd(false)
     }
 
     return (
         <div>
-            <Button onClick={() => setIsOpen(true)}>+ добавить</Button>
+            <Button onClick={() => setIsOpenAdd(true)}>+ добавить</Button>
 
-            <Modal open={isOpen} onClose={() => setIsOpen(false)}>
+            <Modal open={isOpenAdd} onClose={() => setIsOpenAdd(false)}>
                 <form onSubmit={handleSubmit} className={modal.form}>
                     <Input
                         type="text"
@@ -70,6 +78,15 @@ export default function Teachers() {
                 </form>
             </Modal>
 
+            <Modal open={isOpenUpdate} onClose={() => setIsOpenUpdate(false)}>
+                <h1>Изменить преподавателя</h1>
+                <FormTeacherUpdate
+                    setIsOpenUpdate={setIsOpenUpdate}
+                    query={query}
+                    teacherID={updateTeacherID}
+                />
+            </Modal>
+
             <div className={list.list}>
                 {query.data?.length === 0 && <p>Нету преподавателей</p>}
                 {query.data?.map(
@@ -82,6 +99,7 @@ export default function Teachers() {
                             id={teacher.id}
                             fullname={teacher.fullname}
                             delete={handleDelete}
+                            update={handleUpdate}
                         />
                     )
                 )}
