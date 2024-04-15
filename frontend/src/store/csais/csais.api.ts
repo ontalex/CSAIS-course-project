@@ -229,12 +229,41 @@ export const csaisApi = createApi({
             })
         }),
 
+        lessonsFindId: build.query({
+            query: (data) => ({
+                method: "GET",
+                url: "lessons/find/id",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                params: {
+                    id: data.id
+                }
+            })
+        }),
+
         lessonsAdd: build.mutation({
             query: (data) => ({
                 method: "POST",
                 url: "lessons/add",
                 headers: {
                     Authorization: "Bearer " + data.token
+                },
+                body: {
+                    name: data.name
+                }
+            })
+        }),
+
+        lessonUpdate: build.mutation({
+            query: (data) => ({
+                method: "PUT",
+                url: "lessons/update",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                params: {
+                    id: data.id
                 },
                 body: {
                     name: data.name
@@ -291,6 +320,19 @@ export const csaisApi = createApi({
             })
         }),
 
+        groupFindId: build.query({
+            query: (data) => ({
+                method: "GET",
+                url: "groups/find/id",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                params: {
+                    id: data.id
+                }
+            })
+        }),
+
         groupsAdd: build.mutation({
             query: (data) => ({
                 method: "POST",
@@ -303,6 +345,25 @@ export const csaisApi = createApi({
                     date_create: data.date_create,
                     date_end: data.date_end,
                     fullname: data.fullname
+                }
+            })
+        }),
+
+        groupsUpdate: build.mutation({
+            query: (data) => ({
+                method: "PUT",
+                url: "groups/update",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                body: {
+                    name: data.name,
+                    date_create: data.date_create,
+                    date_end: data.date_end,
+                    tutor_name: data.tutor_name
+                },
+                params: {
+                    id: data.id
                 }
             })
         }),
@@ -423,9 +484,11 @@ export const {
     useTeachersUpdateMutation,
 
     useLessonsAllQuery,
+    useLessonsFindIdQuery,
     useLessonsAddMutation,
     useLessonsDeleteMutation,
     useLessonsFindMutation,
+    useLessonUpdateMutation,
 
     useStudentOneQuery,
     useStudentsGetQuery,
@@ -434,10 +497,12 @@ export const {
     useStudentUpdateMutation,
 
     useGroupOneQuery,
+    useGroupFindIdQuery,
     useGroupsAllQuery,
     useGroupsAddMutation,
     useGroupsDeleteMutation,
     useGroupsFindMutation,
+    useGroupsUpdateMutation,
 
     useAuthMutation,
     useAuthTokenMutation,

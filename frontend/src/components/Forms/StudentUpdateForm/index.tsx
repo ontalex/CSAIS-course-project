@@ -45,7 +45,7 @@ export default function StudentUpdateForm({
             id: studentID,
         })
         setIsOpenUpdate(false)
-        query.refetch()
+        setTimeout(() => query.refetch(), 3000)
     }
 
     const fetchingGroups = (name: string) => {

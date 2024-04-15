@@ -3,7 +3,7 @@ import validators from "../../helpers/validators.js";
 
 class GroupsControllers {
     get_all_groups = (req, res) => {
-        let sql = 'select * from `groups`;';
+        let sql = 'SELECT `groups`.`id`, `groups`.`name`, `groups`.`date_create`, `groups`.`date_end`, `teachers`.`id`, `teachers`.`fullname` FROM `groups` JOIN `teachers` ON `groups`.`tutor_id` = `teachers`.`id`';
 
         let callback = (err, result) => {
             if (err) {
@@ -17,6 +17,28 @@ class GroupsControllers {
         }
 
         db_pool.query(sql, callback);
+    }
+
+    get_find_id_groups = (req, res) => {
+        let sql = 'SELECT `groups`.`id`, `groups`.`name`, `groups`.`date_create`, `groups`.`date_end`, `teachers`.`id`, `teachers`.`fullname` FROM `groups` JOIN `teachers` ON `groups`.`tutor_id` = `teachers`.`id` WHERE `groups`.`id` = ?;'
+        let values = [req.query.id];
+        if (validators.everyFiled(values, res)) {
+            return res.status(400).json({
+                name: "None felids",
+                message: "Some felid not send"
+            })
+        }
+        let callback = (err, result) => {
+            if (err) {
+                res.status(500).json({
+                    name: err.name,
+                    message: err.message
+                })
+            }
+
+            res.json(result);
+        }
+        db_pool.query(sql, values, callback);
     }
 
     get_find_groups = (req, res) => {
@@ -75,13 +97,13 @@ class GroupsControllers {
         db_pool.query(sql, values, callback);
     }
     put_update_groups = (req, res) => {
-        let sql = 'update `groups` set name = ?, date_create = ?, date_end = ?, tutor_id = ? where id = ?;';
+        let sql = 'update `groups` set name = ?, date_create = ?, date_end = ?, tutor_id = (select id from teachers where fullname = ? limit 1) where id = ?;';
 
         let values = [
             req.body.name,
             req.body.date_create,
             req.body.date_end,
-            req.body.tutor_id,
+            req.body.tutor_name,
             req.query.id
         ];
 

@@ -1,6 +1,6 @@
 .form_input {
-    max-width: 320px;
-    /* width: 100%; */
+    /* max-width: 320px; */
+    width: 100%;
 
     box-sizing: border-box;
 

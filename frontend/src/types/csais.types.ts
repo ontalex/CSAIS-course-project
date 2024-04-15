@@ -13,7 +13,7 @@ export type TRQ_token = {
 }
 
 export type T_teacher_option = { id: string, fullname: string };
-export type T_group_card = { id: string, name: string };
+export type T_group_card = { id: string, name: string, fullname: string };
 
 export interface I_Schedule_Get_Send {
     token: string,

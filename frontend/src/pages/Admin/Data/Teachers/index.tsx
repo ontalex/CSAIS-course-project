@@ -58,6 +58,7 @@ export default function Teachers() {
             <Button onClick={() => setIsOpenAdd(true)}>+ добавить</Button>
 
             <Modal open={isOpenAdd} onClose={() => setIsOpenAdd(false)}>
+                <h1>Добавить преподавателя</h1>
                 <form onSubmit={handleSubmit} className={modal.form}>
                     <Input
                         type="text"

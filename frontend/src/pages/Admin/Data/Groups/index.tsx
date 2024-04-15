@@ -10,9 +10,13 @@ import {
 import GroupsItem from '../../../../components/Items/Group'
 import { T_group_card } from '../../../../types/csais.types'
 import GroupForm from '../../../../components/Forms/GroupForm'
+import GroupUpdateForm from '../../../../components/Forms/GroupUpdateForm'
 
 export default function Groups() {
-    const [isOpen, setIsOpen] = useState(false) // Modal window
+    const [isOpenAdd, setIsOpenAdd] = useState(false) // Modal window
+    const [isOpenUpdate, setIsOpenUpdate] = useState(false) // Modal window
+
+    const [updateGroup, setUpdateGroup] = useState()
 
     const { user } = useAuth()
 
@@ -30,14 +34,29 @@ export default function Groups() {
         query.refetch()
     }
 
+    const handleUpdate = (id) => {
+        setUpdateGroup(id)
+        setIsOpenUpdate(true)
+    }
+
     return (
         <div>
-            <Button onClick={() => setIsOpen(true)}>+ добавить</Button>
+            <Button onClick={() => setIsOpenAdd(true)}>+ добавить</Button>
 
-            <Modal open={isOpen} onClose={() => setIsOpen(false)}>
+            <Modal open={isOpenAdd} onClose={() => setIsOpenAdd(false)}>
+                <h1>Добавить группу</h1>
                 <GroupForm
-                    closeWindow={() => setIsOpen(false)}
+                    closeWindow={() => setIsOpenAdd(false)}
                     refetchGruops={() => query.refetch()}
+                />
+            </Modal>
+
+            <Modal open={isOpenUpdate} onClose={() => setIsOpenUpdate(false)}>
+                <h1>Изменить группу</h1>
+                <GroupUpdateForm
+                    setIsOpenUpdate={setIsOpenUpdate}
+                    query={query}
+                    groupID={updateGroup}
                 />
             </Modal>
 
@@ -48,6 +67,8 @@ export default function Groups() {
                         key={group.id}
                         name={group.name}
                         id={group.id}
+                        fullname={group.fullname}
+                        update={handleUpdate}
                         delete={handleDelete}
                     />
                 ))}

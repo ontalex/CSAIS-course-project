@@ -45,6 +45,27 @@ class LessonsController {
         db_pool.query(sql, value, callback);
     }
 
+    get_find_id_lessons = (req, res) => {
+        let sql = 'select * from lessons where id = ?;'
+        let value = [req.query.id];
+        if (validators.everyFiled(value, res)) {
+            return res.status(400).json({
+                name: "None felids",
+                message: "Some felid not send"
+            })
+        }
+        let callback = (err, result) => {
+            if (err) {
+                res.status(500).json({
+                    name: err.name,
+                    message: err.message
+                })
+            }
+            res.json(result);
+        }
+        db_pool.query(sql, value, callback);
+    }
+
     post_add_lessons = (req, res) => {
         let sql = `insert into lessons (name) value (?);`;
         let value = [req.body.name];

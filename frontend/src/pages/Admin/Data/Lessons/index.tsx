@@ -15,9 +15,13 @@ import LessonsItem from '../../../../components/Items/Lesson'
 import st from './style.module.css'
 import list from '../list.module.css'
 import modal from '../modal.module.css'
+import FormUpdateLesson from '../../../../components/Forms/FormUpdateLesson'
 
 export default function Lessons() {
-    const [isOpen, setIsOpen] = useState(false) // Modal window
+    const [isOpenAdd, setIsOpenAdd] = useState(false) // Modal window
+    const [isOpenUpdate, setIsOpenUpdate] = useState(false) // Modal window
+
+    const [updateLesson, setUpdateLesson] = useState()
 
     const { user } = useAuth()
 
@@ -34,7 +38,7 @@ export default function Lessons() {
             name: event.target.elements.name.value,
         })
         query.refetch()
-        setIsOpen(false)
+        setIsOpenAdd(false)
     }
 
     const handleDelete = (id) => {
@@ -45,10 +49,17 @@ export default function Lessons() {
         query.refetch()
     }
 
+    const handleUpdate = (id) => {
+        console.log('To update Open window')
+        setUpdateLesson(id)
+        setIsOpenUpdate(true)
+    }
+
     return (
         <div>
-            <Button onClick={() => setIsOpen(true)}>+ добавить</Button>
-            <Modal open={isOpen} onClose={() => setIsOpen(false)}>
+            <Button onClick={() => setIsOpenAdd(true)}>+ добавить</Button>
+            <Modal open={isOpenAdd} onClose={() => setIsOpenAdd(false)}>
+                <h1>Добавить дисциплину</h1>
                 <form onSubmit={handleSubmit} className={modal.form}>
                     <Input
                         type="text"
@@ -57,6 +68,14 @@ export default function Lessons() {
                     />
                     <Button>Сохранить</Button>
                 </form>
+            </Modal>
+            <Modal open={isOpenUpdate} onClose={() => setIsOpenUpdate(false)}>
+                <h1>Изменить дисциплину</h1>
+                <FormUpdateLesson
+                    setIsOpenUpdate={setIsOpenUpdate}
+                    query={query}
+                    lessonID={updateLesson}
+                />
             </Modal>
             <div className={list.list}>
                 {query.data?.length === 0 && <p>Нету дисциплин</p>}
@@ -69,6 +88,7 @@ export default function Lessons() {
                             key={lessons.id}
                             id={lessons.id}
                             delete={handleDelete}
+                            update={handleUpdate}
                             name={lessons.name}
                         />
                     )

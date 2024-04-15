@@ -12,6 +12,12 @@ groups_routs.get(
 );
 
 groups_routs.get(
+    "/find/id",
+    verifyRole("staff", "tutor", "older"),
+    groupsControllers.get_find_id_groups
+);
+
+groups_routs.get(
     "/all",
     verifyRole("staff", "tutor", "older"),
     groupsControllers.get_all_groups
