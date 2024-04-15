@@ -13,7 +13,8 @@ import ScheduleItemNone from '../Items/ScheduleItemNone'
 import st from './style.module.css'
 import Modal from '../Modal'
 import InputDelay from '../InputDelay'
-import GroupSchedule from '../Groups/GroupSchedule'
+import GroupSchedule from '../Forms/GroupSchedule'
+import GroupScheduleUpdate from '../Forms/GroupScheduleUpdate'
 
 interface IScheduleView {
     date: string
@@ -22,6 +23,11 @@ interface IScheduleView {
 
 export const ScheduleView: FC<IScheduleView> = (props) => {
     const { user } = useAuth()
+
+    const [updateScheduleID, setUpdateScheduleID] = useState<
+        string | number | undefined
+    >()
+
     const query = useScheduleGetQuery({
         date_lesson: props.date,
         token: user.token,
@@ -30,7 +36,12 @@ export const ScheduleView: FC<IScheduleView> = (props) => {
 
     const [openEdit, setOpenEdit] = useState(false)
     const [openAdd, setOpenAdd] = useState(false)
+
     const [handLessonNumber, setHandLessonNumber] = useState<number>()
+    const handleChoseUpdate = (id) => {
+        setUpdateScheduleID(id)
+        setOpenEdit(true)
+    }
 
     const [deleteSchedule, deleteScheduleRes] = useScheduleDeleteMutation()
 
@@ -38,6 +49,11 @@ export const ScheduleView: FC<IScheduleView> = (props) => {
         <div className={st.list}>
             <Modal open={openEdit} onClose={() => setOpenEdit(false)}>
                 <h1>Изменить</h1>
+                <GroupScheduleUpdate
+                    closeWindow={() => setOpenEdit(false)}
+                    refetch={() => query.refetch()}
+                    scheduleID={updateScheduleID}
+                />
             </Modal>
 
             <Modal open={openAdd} onClose={() => setOpenAdd(false)}>
@@ -60,11 +76,9 @@ export const ScheduleView: FC<IScheduleView> = (props) => {
                                 <ScheduleItem
                                     {...schedule}
                                     key={schedule.id}
-                                    openEdit={(number_lesson: number): void => {
-                                        console.log('Lesson =', number_lesson)
-                                        setHandLessonNumber(() => number_lesson)
-                                        setOpenEdit(true)
-                                    }}
+                                    openEdit={() =>
+                                        handleChoseUpdate(schedule.id)
+                                    }
                                     delete={(id: number) => {
                                         deleteSchedule({
                                             token: user.token,

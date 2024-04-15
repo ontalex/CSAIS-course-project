@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { TRQ_token, TRQ_login, I_Schedule_Add_Send, I_Schedule_Get_Send, I_Schedule_Delete_Send } from "../../types/csais.types";
+import { method } from "lodash";
 // import { method } from "lodash";
 
 export const csaisApi = createApi({
@@ -431,6 +432,39 @@ export const csaisApi = createApi({
             })
         }),
 
+        scheduleFindId: build.query({
+            query: (data) => ({
+                method: "GET",
+                url: "schedule/find/id",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                params: {
+                    id: data.id
+                },
+            })
+        }),
+
+        scheduleUpdate: build.mutation({
+            query: (data) => ({
+                method: "PUT",
+                url: "schedule/update",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                params: {
+                    id: data.id
+                },
+                body: {
+                    room_first: data.room_first,
+                    lesson_name: data.lesson_name,
+                    teachers_fullname_first: data.teachers_fullname_first,
+                    room_second: data.room_second,
+                    teachers_fullname_second: data.teachers_fullname_second
+                }
+            })
+        }),
+
         scheduleDelete: build.mutation({
             query: (data: I_Schedule_Delete_Send) => ({
                 method: "DELETE",
@@ -510,8 +544,10 @@ export const {
 
     useScheduleGetQuery,
     useScheduleGetMinQuery,
+    useScheduleFindIdQuery,
     useScheduleAddMutation,
     useScheduleDeleteMutation,
+    useScheduleUpdateMutation,
 
     useLogbookDayQuery,
     useLogbookAddMutation

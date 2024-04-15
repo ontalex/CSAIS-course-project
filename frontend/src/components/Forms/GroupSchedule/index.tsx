@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import InputDelay from '../../InputDelay'
 import Input from '../../Input'
 import {
@@ -30,9 +30,9 @@ export default function GroupSchedule({
 
     // Данные для отправки
     const [teacherFirst, setTeacherFirst] = useState<string>('')
-    const [teacherSecond, setTeacherSecond] = useState<string | undefined>()
+    const [teacherSecond, setTeacherSecond] = useState<string>('')
     const [roomFirst, setRoomFirst] = useState<string>('')
-    const [roomSecond, setRoomSecond] = useState<string | undefined>()
+    const [roomSecond, setRoomSecond] = useState<string>('')
     const [lesson, setLesson] = useState<string>('')
 
     const [canSend, setCanSend] = useState<boolean>(false)
@@ -78,6 +78,16 @@ export default function GroupSchedule({
             name: lesson,
         })
     }
+
+    useEffect(() => {
+        if (
+            [teacherFirst, roomFirst, lesson].every((value) => value.trim() !== "")
+        ) {
+            setCanSend(true)
+        } else {
+            setCanSend(false)
+        }
+    }, [teacherFirst, roomFirst, lesson])
 
     return (
         <div className={st.form}>
