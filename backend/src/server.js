@@ -37,21 +37,6 @@ app.use('/api/v1/teachers', verifyToken, teachers_routs);
 app.use('/api/v1/logbook', verifyToken, logbook_routs);
 app.use('/api/v1/olders', verifyToken, older_routs);
 
-app.get("/test", (req, res) => {
-
-    db_pool.query("select * from students;", (err, result) => {
-        if (err) {
-            res.status(500).json({
-                name: err.name,
-                message: err.message
-            });
-        }
-
-        console.log(result);
-        res.json(result);
-    });
-})
-
 app.listen(PORT, () => {
     console.log(`===== SERVER to START =====`);
 });
