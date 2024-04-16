@@ -19,7 +19,7 @@ export default function GroupForm({ closeWindow, refetchGruops }) {
     const [date_end, setDate_end] = useState('')
 
     const [findTeacher, findTeacherRes] = useTeachersFindMinMutation()
-    // const [addGroup, addGroupRes] = useGroupsAddMutation()
+    const [addGroup, addGroupRes] = useGroupsAddMutation()
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()

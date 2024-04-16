@@ -106,6 +106,9 @@ export default function Students() {
                             key={student.id}
                             id={student.id}
                             fullname={student.fullname}
+                            email={student.email}
+                            phone={student.phone}
+                            isActive={student.isactive}
                             delete={handleDelete}
                             update={handleUpdate}
                         />
