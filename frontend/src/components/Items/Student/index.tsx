@@ -93,12 +93,14 @@ export default function StudentsItem(data) {
                         <span>Активировать</span>
                     </button>
                 )}
-                <button
-                    className={st.item_update}
-                    onClick={() => data.update(data.id)}
-                >
-                    <span>Изменить</span>
-                </button>
+                {user.role == 'staff' && (
+                    <button
+                        className={st.item_update}
+                        onClick={() => data.update(data.id)}
+                    >
+                        <span>Изменить</span>
+                    </button>
+                )}
                 {user.role == 'staff' && (
                     <button
                         className={st.item_delete}

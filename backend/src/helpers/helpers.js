@@ -1,3 +1,5 @@
+import { db_pool } from "./database.js";
+
 class Helpers {
   getMondayAndSunday(dateString) {
     const date = new Date(dateString);
@@ -12,46 +14,44 @@ class Helpers {
     };
   }
 
-  hasUser = (id_student) => {
-    let student = {
+  hasUser = async (id_student, res) => {
+    let user = {
       isHas: false,
       data: {},
     };
     let sql = "select * from `users` where `users`.`students_id` = ?;";
     let values = [id_student];
-    let callback = (err, result) => {
-      if (err) {
-        res.status(500).json({
-          name: err.name,
-          message: err.message,
-        });
+    try {
+      let [data, fields] = await db_pool.promise().query(sql, values);
+      if (data.length > 0) {
+        user.isHas = true;
+        user.data = data[0];
       }
-
-      if (result.length > 0) {
-        student.isHas = true;
-        student.data = result[0];
-      }
-    };
-
-    db_pool.query(sql, values, callback);
-    return student;
+      return user;
+    } catch (err) {
+      return res.status(500).json({
+        name: err.name,
+        message: err.message,
+      });
+    }
   };
 
-  getRoleID = (role) => {
-    let sql = "select `roles`.`id` from `roles` where `roles`.`name` = ?;";
-    let values = [role];
-    let roleID;
-
-    let callback = (err, result) => {
-      if (err) {
-        throw Error("DB: ", err);
-      }
-      roleID = result[0];
-    };
-
-    db_pool.query(sql, values, callback);
-    return roleID;
+  getStudent = async (id_student, res) => {
+    // let user = { data: {} };
+    let sql = "select * from `students` where `students`.`id` = ?;";
+    let values = [id_student];
+    console.log("DB: ", id_student);
+    try {
+      let [data, fields] = await db_pool.promise().query(sql, values);
+      return data[0];
+    } catch (err) {
+      return res.status(500).json({
+        name: err.name,
+        message: err.message,
+      });
+    }
   };
+
 }
 
 export default new Helpers();

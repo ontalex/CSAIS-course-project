@@ -63,7 +63,9 @@ export default function Students() {
         <div>
             <SelectGroup group={group} setGroup={setGroup} />
 
-            <Button onClick={() => setIsOpenAdd(true)}>+ добавить</Button>
+            {user.role == 'staff' && (
+                <Button onClick={() => setIsOpenAdd(true)}>+ добавить</Button>
+            )}
 
             <Modal open={isOpenUpdate} onClose={() => setIsOpenUpdate(false)}>
                 <h1>Изменить студента</h1>

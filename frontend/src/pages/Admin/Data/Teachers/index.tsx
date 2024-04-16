@@ -55,7 +55,9 @@ export default function Teachers() {
 
     return (
         <div>
-            <Button onClick={() => setIsOpenAdd(true)}>+ добавить</Button>
+            {user.role == 'staff' && (
+                <Button onClick={() => setIsOpenAdd(true)}>+ добавить</Button>
+            )}
 
             <Modal open={isOpenAdd} onClose={() => setIsOpenAdd(false)}>
                 <h1>Добавить преподавателя</h1>

@@ -1,6 +1,9 @@
-import { json } from "express";
 import { db_pool } from "../../helpers/database.js";
 import validators from "../../helpers/validators.js";
+
+import data_generation from "../../helpers/data_generation.js";
+import bcryptjs from "bcryptjs";
+
 import nodemailer from "nodemailer";
 import helpers from "../../helpers/helpers.js";
 import dotenv from "dotenv";
@@ -56,7 +59,7 @@ class OldersController {
     };
     db_pool.query(sql, values, callback);
   };
-  post_create_older = (req, res) => {
+  post_create_older = async (req, res) => {
     if (validators.everyFiled(["student_id"], res.body)) {
       return res.status(400).json({
         name: "None felids",
@@ -64,15 +67,25 @@ class OldersController {
       });
     }
 
-    // ? Есть пользватель
-    let answer = helpers.hasUser(req.body.student_id);
+    console.log("BODY:", req.body);
 
-    if (answer.isHas) {
+    // ! Есть пользватель
+    let answerDouble = await helpers.hasUser(req.body.student_id, res);
+
+    console.log("answer:", answerDouble);
+
+    if (answerDouble.isHas) {
       return res.json({
         name: "has",
         message: "Пользвоатель уже создан",
       });
     }
+
+    // ! Данные пользователя
+
+    let data = await helpers.getStudent(req.body.student_id, res);
+
+    console.log("SER: ", data);
 
     // генерация логина
     let loginPref = [
@@ -91,17 +104,19 @@ class OldersController {
     let password = data_generation.get_random_string(10);
 
     let sql =
-      "insert into `users` (login, password, secret_key, students_id, roles_id) value (?, ?, ?, ?, ?);";
+      "insert into `users` (login, password, secret_key, students_id, roles_id) value (?, ?, ?, ?, (select `roles`.`id` from `roles` where `roles`.`name` = 'older'));";
     let value = [
       login,
       bcryptjs.hashSync(password, parseInt(process.env.SALT)),
       data_generation.get_random_string(36),
-      answer.data.students_id,
-      helpers.getRoleID("older"),
+      req.body.student_id,
+      // helpers.getRoleID("older"),
     ];
+    console.log(value);
     let callback = async (err, result) => {
       if (err) {
-        res.status(500).json({
+        console.log(err);
+        return res.status(500).json({
           name: err.name,
           message: err.message,
         });
@@ -117,18 +132,38 @@ class OldersController {
         },
       });
 
-      transporter.sendMail({
-        from: 'CASIS <csaisforcollege@yandex.ru>',
-        to: answer.data.email,
-        subject: "Вам предоставлен доступ...",
-        html: `<p>Вам предоставлен доступ к системе ИСПУК (Информационная система посещаемости учащихся колледжа)</p><p>Логин: ${login}</p><p>Пароль: ${password}</p><p>(Письмо сформированно автоматически, ответ вы не получите)</p>`
-      }).then( () => {
-        res.json({ message: "Пользователь создан. Данные отправлены студенту." });
-      } ).catch( () => {
-        res.json({ message: "Произошла ошибка при отпраке сообщения студенту. Пользователь создан." })
-      } );
+      console.log("EMEIL: ", data.email);
 
-
+      await transporter
+        .sendMail({
+          from: "CSAIS <csaisforcollege@yandex.ru>",
+          to: data.email,
+          subject: "Вам предоставлен доступ...",
+          html: `<p>Вам предоставлен доступ к системе ИСПУК (Информационная система посещаемости учащихся колледжа)</p><p>Ваш логин: ${login}</p><p>Пароль: ${password}</p><p>(Письмо сформированно автоматически, ответ вы не получите)</p>`,
+        })
+        .then(() => {
+          console.log(
+            "Пользователь создан. Данные отправлены студенту."
+          );
+          res.json({
+            message:
+              "Пользователь создан. Данные отправлены студенту.",
+          });
+          data.refetch()
+        })
+        .catch((err) => {
+          console.log(
+            "Произошла ошибка при отпраке сообщения студенту. Пользователь создан."
+          );
+          console.log(err);
+          console.log(
+            "Произошла ошибка при отпраке сообщения студенту. Пользователь создан."
+          );
+          res.json({
+            message:
+              "Произошла ошибка при отпраке сообщения студенту. Пользователь создан.",
+          });
+        });
     };
     db_pool.query(sql, value, callback);
   };
