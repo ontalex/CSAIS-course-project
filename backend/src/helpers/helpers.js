@@ -14,13 +14,20 @@ class Helpers {
     };
   }
 
-  hasUser = async (id_student, res) => {
+  hasUser = async (id, res, type) => {
     let user = {
       isHas: false,
       data: {},
     };
-    let sql = "select * from `users` where `users`.`students_id` = ?;";
-    let values = [id_student];
+    let sql, values;
+
+    if (type == "older") {
+      sql = "select * from `users` where `users`.`students_id` = ?;";
+    } else if (type == "tutor") {
+      sql = "select * from `users` where `users`.`teachers_id` = ?;";
+    }
+    values = [id];
+
     try {
       let [data, fields] = await db_pool.promise().query(sql, values);
       if (data.length > 0) {

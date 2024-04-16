@@ -64,6 +64,7 @@ export default function Groups() {
 
             <div className={list.list}>
                 {query.data?.length === 0 && <p>Нету групп</p>}
+                {query.isFetching && <p>Загрузка...</p>}
                 {query.data?.map((group: T_group_card) => (
                     <GroupsItem
                         key={group.id}

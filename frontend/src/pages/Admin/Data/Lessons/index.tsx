@@ -81,6 +81,7 @@ export default function Lessons() {
             </Modal>
             <div className={list.list}>
                 {query.data?.length === 0 && <p>Нету дисциплин</p>}
+                {query.isFetching && <p>Загрузка...</p>}
                 {query.data?.map(
                     (lessons: {
                         id: React.Key | null | undefined

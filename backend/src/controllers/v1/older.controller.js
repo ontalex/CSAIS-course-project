@@ -70,7 +70,7 @@ class OldersController {
     console.log("BODY:", req.body);
 
     // ! Есть пользватель
-    let answerDouble = await helpers.hasUser(req.body.student_id, res);
+    let answerDouble = await helpers.hasUser(req.body.student_id, res, "older");
 
     console.log("answer:", answerDouble);
 
@@ -149,7 +149,6 @@ class OldersController {
             message:
               "Пользователь создан. Данные отправлены студенту.",
           });
-          data.refetch()
         })
         .catch((err) => {
           console.log(

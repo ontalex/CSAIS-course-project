@@ -92,6 +92,7 @@ export default function Teachers() {
 
             <div className={list.list}>
                 {query.data?.length === 0 && <p>Нету преподавателей</p>}
+                {query.isFetching && <p>Загрузка...</p>}
                 {query.data?.map(
                     (teacher: {
                         id: React.Key | null | undefined
