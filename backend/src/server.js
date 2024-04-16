@@ -15,6 +15,7 @@ import logbook_routs from "./routes/v1/logbook.routes.js";
 
 import { db_pool } from "./helpers/database.js";
 import { verifyToken } from "./helpers/middleware/auth.middleware.js";
+import older_routs from "./routes/v1/olders.routes.js";
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use('/api/v1/users', verifyToken, users_routs)
 app.use('/api/v1/roles', verifyToken, roles_routs)
 app.use('/api/v1/teachers', verifyToken, teachers_routs);
 app.use('/api/v1/logbook', verifyToken, logbook_routs);
+app.use('/api/v1/olders', verifyToken, older_routs);
 
 app.get("/test", (req, res) => {
 

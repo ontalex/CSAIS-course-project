@@ -38,5 +38,4 @@ students_routs.delete(
     verifyRole("staff"),
     studentsControllers.delete_student
 );
-
 export default students_routs;

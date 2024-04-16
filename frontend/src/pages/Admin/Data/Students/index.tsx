@@ -105,12 +105,14 @@ export default function Students() {
                         <StudentsItem
                             key={student.id}
                             id={student.id}
+                            user_id={student.user_id}
                             fullname={student.fullname}
                             email={student.email}
                             phone={student.phone}
                             isActive={student.isactive}
                             delete={handleDelete}
                             update={handleUpdate}
+                            refetch={() => query.refetch()}
                         />
                     ))}
             </div>

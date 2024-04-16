@@ -5,7 +5,7 @@ class StudentControllers {
     get_all_students = (req, res) => {
 
         // let sql = `select students.id, students.fullname, students.phone, students.email, students.group_id, users.isactive from students left join users on students.id = users.students_id where students.group_id = ? order by students.fullname;`;
-        let sql = 'SELECT `students`.*, `users`.`isactive`, `users`.`id` FROM `students` LEFT JOIN `users` ON `students`.`id` = `users`.`students_id` where students.group_id = ? order by students.fullname;';
+        let sql = 'SELECT `students`.*, `users`.`isactive`, `users`.`id` as `user_id` FROM `students` LEFT JOIN `users` ON `students`.`id` = `users`.`students_id` where students.group_id = ? order by students.fullname;';
         let value = [Number(req.query.group_id)];
 
         if (validators.everyFiled(["group_id"], req.query)) {
@@ -183,6 +183,8 @@ class StudentControllers {
 
         db_pool.query(sql, value, callback);
     }
+
+
 }
 
 export default new StudentControllers();

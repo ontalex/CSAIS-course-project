@@ -124,6 +124,43 @@ export const csaisApi = createApi({
             })
         }),
 
+        olderActive: build.mutation({
+            query: (data) => ({
+                url: "olders/active",
+                method: "POST",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                body: {
+                    student_id: data.id,
+                }
+            })
+        }),
+        olderOff: build.mutation({
+            query: (data) => ({
+                url: "olders/off",
+                method: "POST",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                body: {
+                    student_id: data.id,
+                }
+            })
+        }),
+        olderCreate: build.mutation({
+            query: (data) => ({
+                url: "olders/create",
+                method: "POST",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                body: {
+                    student_id: data.id,
+                }
+            })
+        }),
+
         teachersAll: build.query({
             query: (data) => ({
                 url: "teachers/all",
@@ -529,6 +566,10 @@ export const {
     useStudentsAddMutation,
     useStudentsDeleteMutation,
     useStudentUpdateMutation,
+
+    useOlderActiveMutation,
+    useOlderCreateMutation,
+    useOlderOffMutation,
 
     useGroupOneQuery,
     useGroupFindIdQuery,
