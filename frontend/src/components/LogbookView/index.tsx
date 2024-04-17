@@ -1,3 +1,4 @@
+import { times } from 'lodash'
 import { useAuth } from '../../hooks/useAuth'
 import {
     useLogbookAddMutation,
@@ -32,7 +33,14 @@ export default function LogbookView({
             {query.isSuccess && !query.isError && (
                 <div>
                     {query.data?.length ? (
-                        query.data?.map((item) => <p>{item.fullname}</p>)
+                        query.data?.map((item) => (
+                            <LogStudent
+                                typeLog={'у'}
+                                fullname={item.fullname}
+                                schedule_id={''}
+                                student_id={''}
+                            />
+                        ))
                     ) : (
                         <>
                             <p>
@@ -52,23 +60,42 @@ export default function LogbookView({
 
 function LogStudent({
     typeLog,
+    fullname,
     schedule_id,
     student_id,
 }: {
     typeLog: string
+    fullname: string
     schedule_id: string
     student_id: string
 }) {
     const { user } = useAuth()
     const [addLog, addLogRes] = useLogbookAddMutation()
 
-    // const handleTypeLog = (event) => {
-    //     if() {
+    /*
 
-    //     } else if {
+    Если log = null, а newlog = "у / н / б / о", то useAdd
+    Если log = "у / н / б / о", а newlog = "у / н / б / о", то useUpdate
+    Если onClick => Drop, то useDelete
 
-    //     } else {
+    */
 
-    //     }
-    // }
+    return (
+        <label>
+            <p>{fullname}</p>
+            <div className={''}>
+                <select name="typeLog" id="" value={typeLog}>
+                    <option value="у">Уважительная</option>
+                    <option value="н">Неуважительная</option>
+                    <option value="б">Болезнь</option>
+                    <option value="о">Опоздание</option>
+                </select>
+                {typeLog !== '' && (
+                    <Button>
+                        <span>Drop</span>
+                    </Button>
+                )}
+            </div>
+        </label>
+    )
 }
