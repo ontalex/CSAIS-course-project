@@ -43,6 +43,20 @@ class Helpers {
     }
   };
 
+  getRoleID = async (role) => {
+    let sql = "select `roles`.`id` from `roles` where `roles`.`name` = ?;";
+    let values = [role];
+    try {
+      let [data, fields] = await db_pool.promise().query(sql, values);
+      return data[0].id;
+    } catch (err) {
+      return res.status(500).json({
+        name: err.name,
+        message: err.message,
+      });
+    }
+  }
+
   getStudent = async (id_student, res) => {
     // let user = { data: {} };
     let sql = "select * from `students` where `students`.`id` = ?;";
@@ -58,6 +72,20 @@ class Helpers {
       });
     }
   };
+
+  getTeacher = async (fullname, res) => {
+    let sql = "select * from `teachers` where `teachers`.`fullname` = ? limit 1";
+    let values = [fullname];
+    try {
+      let [data, fields] = await db_pool.promise().query(sql, values);
+      return data[0];
+    } catch (err) {
+      return res.status(500).json({
+        name: err.name,
+        message: err.message,
+      });
+    }
+  }
 
 }
 
