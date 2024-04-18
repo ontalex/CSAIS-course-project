@@ -571,6 +571,21 @@ export const csaisApi = createApi({
                     id: data.id
                 }
             })
+        }),
+
+        logbookTop: build.query({
+            query: (data) => ({
+                method: "POST",
+                url: "logbook/top",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                body: {
+                    day: data.day,
+                    group_id: data.group_id,
+                    type_log: data.type_log
+                }
+            })
         })
 
     })
@@ -623,5 +638,6 @@ export const {
     useLogbookDayQuery,
     useLogbookAddMutation,
     useLogbookUpdateMutation,
-    useLogbookDeleteMutation
+    useLogbookDeleteMutation,
+    useLogbookTopQuery
 } = csaisApi;
