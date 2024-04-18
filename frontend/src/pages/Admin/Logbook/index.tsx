@@ -8,7 +8,7 @@ import { useLogbookDayQuery } from '../../../store/csais/csais.api'
 import { useAuth } from '../../../hooks/useAuth'
 import Button from '../../../components/Button'
 import SelectLesson from '../../../components/Selects/SelectLesson'
-import LogbookView from '../../../components/LogbookView'
+import LogbookView from '../../../components/Items/Logs/LogbookView'
 
 export default function Logbook() {
     const [group, setGroup] = useState(() => store.getState().group.groupID)
