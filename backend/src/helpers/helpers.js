@@ -55,7 +55,7 @@ class Helpers {
         message: err.message,
       });
     }
-  }
+  };
 
   getStudent = async (id_student, res) => {
     // let user = { data: {} };
@@ -74,7 +74,8 @@ class Helpers {
   };
 
   getTeacher = async (fullname, res) => {
-    let sql = "select * from `teachers` where `teachers`.`fullname` = ? limit 1";
+    let sql =
+      "select * from `teachers` where `teachers`.`fullname` = ? limit 1";
     let values = [fullname];
     try {
       let [data, fields] = await db_pool.promise().query(sql, values);
@@ -85,8 +86,32 @@ class Helpers {
         message: err.message,
       });
     }
-  }
+  };
 
+  check_have_logbook = async (values, res) => {
+    let sql =
+      'select * from `logbook` join `schedule` on `logbook`.`schedule_id`= `schedule`.`id` where `schedule`.`date_lesson` = "2024-04-18" and `schedule`.`number_lesson` = 1 and `logbook`.`students_id` = ?;';
+    try {
+      let [data, fields, ...other] = await db_pool.promise().query(sql, values);
+      let has, resultLog;
+
+      console.log([data, fields, other]);
+
+      if (data.length == 0) {
+        has = false;
+      } else {
+        has = true;
+        resultLog = data[0];
+      }
+
+      return { has: has, result: resultLog };
+    } catch (error) {
+      return res.status(500).json({
+        name: err.name,
+        message: err.message,
+      });
+    }
+  };
 }
 
 export default new Helpers();

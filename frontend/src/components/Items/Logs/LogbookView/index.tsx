@@ -5,11 +5,13 @@ import {
     useLogbookDayQuery,
 } from '../../../../store/csais/csais.api'
 import Button from '../../../Button'
-import { useEffect } from 'react'
+import { createContext, useEffect } from 'react'
 import LogStudentShow from '../LogStudentShow'
 import LogStudentEdit from '../LogStudentEdit'
 
-import st from "../style.module.css";
+import st from '../style.module.css'
+
+export let LogsListContext = createContext({})
 
 export default function LogbookView({
     group,
@@ -27,32 +29,31 @@ export default function LogbookView({
 
     const typeLogs = {
         у: {
-            type: "у",
+            type: 'у',
             style: st.log_type_u,
-            name: "Уважительная"
+            name: 'Уважительная',
         },
         н: {
-            type: "н",
+            type: 'н',
             style: st.log_type_n,
-            name: "Неуважительная"
+            name: 'Неуважительная',
         },
         б: {
-            type: "б",
+            type: 'б',
             style: st.log_type_b,
-            name: "Болезнь"
+            name: 'Болезнь',
         },
         о: {
-            type: "о",
+            type: 'о',
             style: st.log_type_o,
-            name: "Опоздание"
+            name: 'Опоздание',
         },
         none: {
-            type: "none",
+            type: 'none',
             style: st.log_type_none,
-            name: "На месте"
-
-        }
-    };
+            name: 'На месте',
+        },
+    }
 
     return (
         <>
@@ -63,35 +64,46 @@ export default function LogbookView({
                 </Button>
             )}
             {query.isSuccess && !query.isError && (
-                <div className={st.log_list}>
-                    {query.data?.length ? (
-                        query.data?.map((item) =>
-                            user.role == 'staff' ? (
-                                <LogStudentShow
-                                    typeLog={typeLogs[item.type_log ?? "none"]}
-                                    fullname={item.fullname}
-                                />
-                            ) : (
-                                <LogStudentEdit
-                                    typeLog={typeLogs[item.type_log ?? "none"]}
-                                    fullname={item.fullname}
-                                    schedule_id={lesson}
-                                    student_id={item.id}
-                                />
+                <>
+                    <Button onClick={() => query.refetch()}>
+                        <span>Обновить данные</span>
+                    </Button>
+                    <div className={st.log_list}>
+                        {query.data?.length ? (
+                            query.data?.map((item) =>
+                                user.role == 'staff' ? (
+                                    <LogStudentShow
+                                        typeLog={
+                                            typeLogs[item.type_log ?? 'none']
+                                        }
+                                        fullname={item.fullname}
+                                    />
+                                ) : (
+                                    <LogStudentEdit
+                                        typeLog={
+                                            typeLogs[item.type_log ?? 'none']
+                                        }
+                                        fullname={item.fullname}
+                                        schedule_id={lesson}
+                                        student_id={item.id}
+                                        id={item.log_id}
+                                        refetch={() => query.refetch()}
+                                    />
+                                )
                             )
-                        )
-                    ) : (
-                        <>
-                            <p>
-                                Студентов в группе нету. Проверьте таблицу
-                                студентов
-                            </p>
-                            <Button onClick={query.refetch}>
-                                Или перезагрузите
-                            </Button>
-                        </>
-                    )}
-                </div>
+                        ) : (
+                            <>
+                                <p>
+                                    Студентов в группе нету. Проверьте таблицу
+                                    студентов
+                                </p>
+                                <Button onClick={query.refetch}>
+                                    Или перезагрузите
+                                </Button>
+                            </>
+                        )}
+                    </div>
+                </>
             )}
         </>
     )

@@ -2,32 +2,10 @@ import { db_pool } from "../../helpers/database.js";
 import helpers from "../../helpers/helpers.js";
 import validators from "../../helpers/validators.js";
 
-let check_have_logbook = (values, res) => {
-    let sql = 'select * from `logbook` join `schedule` on `logbook`.`lessons_id`= `schedule`.`id` where `schedule`.`date_lesson` = ? and `schedule`.`number_lesson` = ?;'
-    let has = true;
-    let resultLog = [];
-    let callback = (err, result) => {
-
-        if (err) {
-            res.status(500).json({
-                name: err.name,
-                message: err.message
-            })
-        }
-
-        if (result.length > 0) {
-            has != false;
-            resultLog = result;
-        }
-    }
-    db_pool.query(sql, values, callback);
-    return { has, result: resultLog };
-}
-
 class LogbookController {
 
     get_lesson_logbook = (req, res) => {
-        let sql = 'select students.id, students.fullname, logbooks.type_log, logbooks.date_update from students LEFT OUTER JOIN ( SELECT * FROM logbook WHERE logbook.schedule_id = ?) as logbooks ON students.id = logbooks.students_id WHERE students.group_id = ? ORDER BY students.fullname;'
+        let sql = 'select students.id, students.fullname, logbooks.type_log, logbooks.date_update, logbooks.id as log_id from students LEFT OUTER JOIN ( SELECT * FROM logbook WHERE logbook.schedule_id = ?) as logbooks ON students.id = logbooks.students_id WHERE students.group_id = ? ORDER BY students.fullname;'
 
         let values = [req.query.schedule_id, req.query.group_id];
         if (validators.everyFiled(values, res)) {
@@ -49,9 +27,9 @@ class LogbookController {
         db_pool.query(sql, values, callback);
     }
 
-    post_add_logbook = (req, res) => {
+    post_add_logbook = async (req, res) => {
 
-        let sql = 'insert into `logbook` (type_log, date_update, schedule_id, student_id,) value (?, NOW(), ?, ?);';
+        let sql = 'insert into `logbook` (type_log, date_update, schedule_id, students_id) value (?, NOW(), ?, ?);';
         let values = [
             req.body.type_log,
             req.body.schedule_id,
@@ -65,7 +43,8 @@ class LogbookController {
             })
         }
 
-        let hasLog = check_have_logbook(values, res);
+        let hasLog = await helpers.check_have_logbook(values, res);
+        console.log(hasLog)
         if (hasLog.has) {
             return res.status(409).json({
                 name: "Already Has",
@@ -115,8 +94,12 @@ class LogbookController {
 
     delete_logbook = (req, res) => {
         let sql = 'delete from `logbook` where `logbook`.`id` = ?;';
+        console.log({
+            query: req.query,
+            body: req.body
+        })
         let values = [req.query.id];
-        if (validators.everyFiled(values, res)) {
+        if (validators.everyFiled(["id"], req.query)) {
             return res.status(400).json({
                 name: "None felids",
                 message: "Some felid not send"

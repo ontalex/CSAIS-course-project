@@ -538,7 +538,37 @@ export const csaisApi = createApi({
                 },
                 body: {
                     type_log: data.type_log,
+                    student_id: data.student_id,
                     schedule_id: data.schedule_id
+                }
+            })
+        }),
+
+        logbookUpdate: build.mutation({
+            query: (data) => ({
+                method: "PUT",
+                url: "logbook/update",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                body: {
+                    type_log: data.type_log,
+                },
+                params: {
+                    id: data.id
+                }
+            })
+        }),
+
+        logbookDelete: build.mutation({
+            query: (data) => ({
+                method: "DELETE",
+                url: "logbook/delete",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                params: {
+                    id: data.id
                 }
             })
         })
@@ -591,5 +621,7 @@ export const {
     useScheduleUpdateMutation,
 
     useLogbookDayQuery,
-    useLogbookAddMutation
+    useLogbookAddMutation,
+    useLogbookUpdateMutation,
+    useLogbookDeleteMutation
 } = csaisApi;

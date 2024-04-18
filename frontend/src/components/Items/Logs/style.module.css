@@ -36,8 +36,37 @@
     font-size: 16px;
 }
 
-.log_type_n {}
-.log_type_b {}
-.log_type_u {}
-.log_type_o {}
-.log_type_none {}
+:root {
+    --width-border: 2px;
+}
+
+.log_type_n {
+    /* border: 1px solid red; */
+    border-width: var(--width-border);
+    border-color: red;
+    border-style: solid;
+}
+.log_type_b {
+    /* border: 1px solid green; */
+    border-width: var(--width-border);
+    border-color: green;
+    border-style: solid;
+}
+.log_type_u {
+    /* border: 1px solid blue; */
+    border-width: var(--width-border);
+    border-color: blue;
+    border-style: solid;
+}
+.log_type_o {
+    /* border: 1px dotted darkgray; */
+    border-width: var(--width-border);
+    border-color: gray;
+    border-style: dotted;
+}
+.log_type_none {
+    /* border: 1px solid #0000; */
+    border-width: var(--width-border);
+    border-color: #0000;
+    border-style: solid;
+}

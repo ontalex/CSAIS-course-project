@@ -1,5 +1,6 @@
 import React from 'react'
 import st from "../style.module.css";
+import stylejoin from '../../../../lib/stylejoin';
 export default function LogStudentShow({
     typeLog,
     fullname,
@@ -13,7 +14,7 @@ export default function LogStudentShow({
 }) {
 
     return (
-        <div className={st.log_box}>
+        <div className={stylejoin(st.log_box, typeLog.style)}>
             <p className={st.log_name}>{fullname}</p>
             <p className={st.log_type}>{typeLog.name}</p>
         </div>

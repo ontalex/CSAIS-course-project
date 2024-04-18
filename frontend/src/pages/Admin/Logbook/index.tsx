@@ -16,11 +16,7 @@ export default function Logbook() {
         () => new Date().toISOString().split('T')[0]
     )
     const [lesson, setLesson] = useState()
-
-    // useEffect(() => {
-    //     console.log(group, date, lesson)
-    // }, [date, group, lesson])
-
+    
     useEffect(() => {
         setLesson(undefined)
     }, [date, group])
