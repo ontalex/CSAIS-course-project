@@ -1,12 +1,10 @@
-import React from 'react';
-import st from "./wrapper.module.css";
+import React from 'react'
+import st from './wrapper.module.css'
 
 export default function MainWrapper({
-  children,
+    children,
 }: {
-  children: React.ReactNode;
+    children: React.ReactNode
 }) {
-  return <div className={st.wrapper}>
-    {children}
-  </div>;
+    return <div className={st.wrapper}>{children}</div>
 }
