@@ -2,15 +2,20 @@ import { db_pool } from "./database.js";
 
 class Helpers {
   getMondayAndSunday(dateString) {
+    console.log(dateString);
+
     const date = new Date(dateString);
     const day = date.getDay();
+
     const monday = new Date(date);
     monday.setDate(date.getDate() - day + (day === 0 ? -6 : 1)); // переходим к понедельнику
+
     const sunday = new Date(monday);
     sunday.setDate(monday.getDate() + 6); // переходим к воскресенью
+
     return {
-      monday: monday.toISOString().slice(0, 10),
-      sunday: sunday.toISOString().slice(0, 10),
+      monday: monday.toISOString().split("T")[0],
+      sunday: sunday.toISOString().split("T")[0],
     };
   }
 
@@ -107,8 +112,8 @@ class Helpers {
       return { has: has, result: resultLog };
     } catch (error) {
       return res.status(500).json({
-        name: err.name,
-        message: err.message,
+        name: error.name,
+        message: error.message,
       });
     }
   };

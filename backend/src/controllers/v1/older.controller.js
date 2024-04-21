@@ -4,6 +4,8 @@ import validators from "../../helpers/validators.js";
 import nodemailer from "nodemailer";
 import helpers from "../../helpers/helpers.js";
 import dotenv from "dotenv";
+import data_generation from "../../helpers/data_generation.js";
+import bcryptjs from "bcryptjs"
 
 dotenv.config();
 
@@ -122,11 +124,11 @@ class OldersController {
         to: answer.data.email,
         subject: "Вам предоставлен доступ...",
         html: `<p>Вам предоставлен доступ к системе ИСПУК (Информационная система посещаемости учащихся колледжа)</p><p>Логин: ${login}</p><p>Пароль: ${password}</p><p>(Письмо сформированно автоматически, ответ вы не получите)</p>`
-      }).then( () => {
+      }).then(() => {
         res.json({ message: "Пользователь создан. Данные отправлены студенту." });
-      } ).catch( () => {
+      }).catch(() => {
         res.json({ message: "Произошла ошибка при отпраке сообщения студенту. Пользователь создан." })
-      } );
+      });
 
 
     };

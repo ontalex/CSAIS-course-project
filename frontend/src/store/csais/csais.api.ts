@@ -586,6 +586,20 @@ export const csaisApi = createApi({
                     type_log: data.type_log
                 }
             })
+        }),
+
+        logbookPercent: build.query({
+            query: (data) => ({
+                method: "GET",
+                url: "logbook/percent",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                params: {
+                    day: data.day,
+                    group_id: data.group_id,
+                }
+            })
         })
 
     })
@@ -639,5 +653,6 @@ export const {
     useLogbookAddMutation,
     useLogbookUpdateMutation,
     useLogbookDeleteMutation,
-    useLogbookTopQuery
+    useLogbookTopQuery,
+    useLogbookPercentQuery
 } = csaisApi;

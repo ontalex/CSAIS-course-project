@@ -59,3 +59,9 @@
 .item_flex_between_center p {
     margin: 0;
 }
+
+.card_percent {
+    text-align: center;
+    margin: 0;
+    font-size: 48px;
+}
