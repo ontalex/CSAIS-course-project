@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 class Data_generations {
     get_random_string = (len) => {
-        let abc = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+*/|,.?{}[]:;";
+        let abc = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         let rs = "";
         while (rs.length < len) {
             rs += abc[Math.floor(Math.random() * abc.length)];
