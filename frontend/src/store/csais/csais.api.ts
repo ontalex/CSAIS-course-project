@@ -38,6 +38,30 @@ export const csaisApi = createApi({
             })
         }),
 
+        profileGetSelf: build.query({
+            query: (data) => ({
+                url: "users/self",
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                }
+            })
+        }),
+
+        profileUpdateSelf: build.mutation({
+            query: (data) => ({
+                url: "users/self/update",
+                method: "post",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                body: {
+                    login: data.login,
+                    password: data.password
+                }
+            })
+        }),
+
         accessesGroups: build.query({
             query: (data: TRQ_token) => ({
                 url: "groups/accesses",
@@ -641,6 +665,9 @@ export const {
     useAuthMutation,
     useAuthTokenMutation,
     useAccessesGroupsQuery,
+
+    useProfileGetSelfQuery,
+    useProfileUpdateSelfMutation,
 
     useScheduleGetQuery,
     useScheduleGetMinQuery,

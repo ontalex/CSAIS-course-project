@@ -1,149 +1,174 @@
 import bcryptjs from "bcryptjs";
 import dotenv from "dotenv";
+dotenv.config();
 
 import data_generation from "../../helpers/data_generation.js";
 import validators from "../../helpers/validators.js";
 import { db_pool } from "../../helpers/database.js";
 
-dotenv.config();
-
 class UsersControllers {
-    get_all_users = (req, res) => {
-        let sql = 'select * from `users`;';
-        let value = [];
-        let callback = (err, result) => {
-            if (err) {
-                res.status(500).json({
-                    name: err.name,
-                    message: err.message
-                })
-            }
+  get_all_users = (req, res) => {
+    let sql = "select * from `users`;";
+    let value = [];
+    let callback = (err, result) => {
+      if (err) {
+        res.status(500).json({
+          name: err.name,
+          message: err.message,
+        });
+      }
 
-            res.json(result);
-        }
-        db_pool.query(sql, value, callback);
+      res.json(result);
+    };
+    db_pool.query(sql, value, callback);
+  };
+
+  get_users_self = (req, res) => {
+    let sql = "select `users`.`login` from `users` where `users`.`id` = ?;";
+    let values = [req.user.user_id];
+
+    if (validators.everyFiled(values)) {
+      return res.status(400).json({
+        name: "None felids",
+        message: "Some felid not send",
+      });
     }
 
-    get_users_self = (req, res) => {
+    let callback = (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          name: err.name,
+          message: err.message,
+        });
+      }
 
-        let sql = 'select * from `users` where `users`.`id` = ?;';
-        let values = [
-            req.user.user_id
-        ];
+      res.json(result);
+    };
+    db_pool.query(sql, values, callback);
+  };
 
-        if (validators.everyFiled(values)) {
-            return res.status(400).json({
-                name: "None felids",
-                message: "Some felid not send"
-            })
-        }
+  put_update_self = (req, res) => {
+    let sql =
+      "update users set login = ?, password = ? where id = ?;";
+    let values = [
+      req.body.login,
+      bcryptjs.hashSync(req.body.password, parseInt(process.env.SALT)),
+      req.user.user_id,
+    ];
 
-        let callback = (err, result) => {
-
-            if (err) {
-                res.status(500).json({
-                    name: err.name,
-                    message: err.message
-                })
-            }
-
-            res.json(result);
-
-        }
-        db_pool.query(sql, values, callback);
-
+    if (validators.everyFiled(["password", "login"], req.body)) {
+      return res.status(400).json({
+        name: "None felids",
+        message: "Some felid not send",
+      });
     }
 
-    post_add_user = (req, res) => {
+    console.log("USER DATA:", values);
+    
 
-        let sql, value;
+    let callback = (err, result) => {
+      if (err) {
+        return res.json({
+          name: err.name,
+          message: err.message,
+        });
+      }
+      return res.json(result);
+    };
 
-        if (validators.everyFiled([
-            req.body.type,
-            req.body.login,
-            req.body.rule_id
-        ])) {
-            return res.status(400).json({
-                name: "None felids",
-                message: "Some felid not send"
-            })
-        }
+    db_pool.query(sql, values, callback);
+  };
 
-        let pass = data_generation.get_random_string(5);
+  post_add_user = (req, res) => {
+    let sql, value;
 
-        if (["older"].includes(req.body.type)) {
-            sql = 'insert into `users` (login, password, secret_key, students_id, roles_id) value (?, ?, ?, ?, ?);';
-            value = [
-                req.body.login,
-                bcryptjs.hashSync(pass, parseInt(process.env.SALT)),
-                data_generation.get_random_string(36),
-                req.body.students_id,
-                req.body.rule_id
-            ]
-        } else if (["tutor"].includes(req.body.type)) {
-            sql = 'insert into `users` (login, password, secret_key, teachers_id, roles_id) value (?, ?, ?, ?, ?);'
-            value = [
-                req.body.login,
-                bcryptjs.hashSync(pass, parseInt(process.env.SALT)),
-                data_generation.get_random_string(36),
-                req.body.teachers_id,
-                req.body.rule_id
-            ]
-        } else {
-            sql = 'insert into `users` (login, password, secret_key, roles_id) value (?, ?, ?, ?);'
-            value = [
-                req.body.login,
-                bcryptjs.hashSync(pass, parseInt(process.env.SALT)),
-                data_generation.get_random_string(36),
-                req.body.rule_id
-            ]
-        }
-
-        console.log(value);
-        let callback = (err, result) => {
-            if (err) {
-                res.status(500).json({
-                    name: err.name,
-                    message: err.message
-                })
-            }
-
-            res.json({ ...result, pass });
-        }
-        db_pool.query(sql, value, callback);
+    if (
+      validators.everyFiled([req.body.type, req.body.login, req.body.rule_id])
+    ) {
+      return res.status(400).json({
+        name: "None felids",
+        message: "Some felid not send",
+      });
     }
 
-    put_update_user = (req, res) => {
-        let sql = 'update `users` set ';
-        let value = [];
-        let callback = (err, result) => {
-            if (err) {
-                res.status(500).json({
-                    name: err.name,
-                    message: err.message
-                })
-            }
+    let pass = data_generation.get_random_string(5);
 
-            res.json(result);
-        }
-        db_pool.query(sql, value, callback);
+    if (["older"].includes(req.body.type)) {
+      sql =
+        "insert into `users` (login, password, secret_key, students_id, roles_id) value (?, ?, ?, ?, ?);";
+      value = [
+        req.body.login,
+        bcryptjs.hashSync(pass, parseInt(process.env.SALT)),
+        data_generation.get_random_string(36),
+        req.body.students_id,
+        req.body.rule_id,
+      ];
+    } else if (["tutor"].includes(req.body.type)) {
+      sql =
+        "insert into `users` (login, password, secret_key, teachers_id, roles_id) value (?, ?, ?, ?, ?);";
+      value = [
+        req.body.login,
+        bcryptjs.hashSync(pass, parseInt(process.env.SALT)),
+        data_generation.get_random_string(36),
+        req.body.teachers_id,
+        req.body.rule_id,
+      ];
+    } else {
+      sql =
+        "insert into `users` (login, password, secret_key, roles_id) value (?, ?, ?, ?);";
+      value = [
+        req.body.login,
+        bcryptjs.hashSync(pass, parseInt(process.env.SALT)),
+        data_generation.get_random_string(36),
+        req.body.rule_id,
+      ];
     }
 
-    delete_user = (req, res) => {
-        let sql = 'delete from `users` where id = ?';
-        let value = [req.query.id];
-        let callback = (err, result) => {
-            if (err) {
-                res.status(500).json({
-                    name: err.name,
-                    message: err.message
-                })
-            }
+    console.log(value);
+    let callback = (err, result) => {
+      if (err) {
+        res.status(500).json({
+          name: err.name,
+          message: err.message,
+        });
+      }
 
-            res.json(result);
-        }
-        db_pool.query(sql, value, callback);
-    }
+      res.json({ ...result, pass });
+    };
+    db_pool.query(sql, value, callback);
+  };
+
+  put_update_user = (req, res) => {
+    let sql = "update `users` set ";
+    let value = [];
+    let callback = (err, result) => {
+      if (err) {
+        res.status(500).json({
+          name: err.name,
+          message: err.message,
+        });
+      }
+
+      res.json(result);
+    };
+    db_pool.query(sql, value, callback);
+  };
+
+  delete_user = (req, res) => {
+    let sql = "delete from `users` where id = ?";
+    let value = [req.query.id];
+    let callback = (err, result) => {
+      if (err) {
+        res.status(500).json({
+          name: err.name,
+          message: err.message,
+        });
+      }
+
+      res.json(result);
+    };
+    db_pool.query(sql, value, callback);
+  };
 }
 
 export default new UsersControllers();

@@ -1,5 +1,8 @@
 import { db_pool } from "./database.js";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 class Helpers {
   getMondayAndSunday(dateString) {
     console.log(dateString);
@@ -26,12 +29,16 @@ class Helpers {
     };
     let sql, values;
 
+    console.log("HELPER HASUSE DATA:",id)
+    
     if (type == "older") {
       sql = "select * from `users` where `users`.`students_id` = ?;";
     } else if (type == "tutor") {
       sql = "select * from `users` where `users`.`teachers_id` = ?;";
     }
     values = [id];
+    
+    console.log("HELPER HASUSE sql:", sql, values)
 
     try {
       let [data, fields] = await db_pool.promise().query(sql, values);
@@ -39,6 +46,7 @@ class Helpers {
         user.isHas = true;
         user.data = data[0];
       }
+      console.log("Found user", data)
       return user;
     } catch (err) {
       return res.status(500).json({

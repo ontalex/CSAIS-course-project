@@ -1,0 +1,10 @@
+.form {
+    max-width: 400px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    border: 3px solid #313c4d;
+    border-radius: 8px;
+    padding: 12px;
+}
+

@@ -67,7 +67,11 @@ class OldersController {
     }
 
     // ? Есть пользватель
-    let answer = helpers.hasUser(req.body.student_id);
+    let answer = await helpers.hasUser(req.body.student_id, res, "older");
+    let student = await helpers.getStudent(req.body.student_id, res)
+
+    console.log(answer)
+    console.log(student)
 
     if (answer.isHas) {
       return res.json({
@@ -98,7 +102,7 @@ class OldersController {
       login,
       bcryptjs.hashSync(password, parseInt(process.env.SALT)),
       data_generation.get_random_string(36),
-      answer.data.students_id,
+      req.body.student_id,
       await helpers.getRoleID("older"),
     ];
     let callback = async (err, result) => {
@@ -108,6 +112,8 @@ class OldersController {
           message: err.message,
         });
       }
+
+      console.log(result)
 
       let transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
@@ -121,12 +127,13 @@ class OldersController {
 
       transporter.sendMail({
         from: 'CASIS <csaisforcollege@yandex.ru>',
-        to: answer.data.email,
+        to: student.email,
         subject: "Вам предоставлен доступ...",
         html: `<p>Вам предоставлен доступ к системе ИСПУК (Информационная система посещаемости учащихся колледжа)</p><p>Логин: ${login}</p><p>Пароль: ${password}</p><p>(Письмо сформированно автоматически, ответ вы не получите)</p>`
       }).then(() => {
         res.json({ message: "Пользователь создан. Данные отправлены студенту." });
-      }).catch(() => {
+      }).catch((err) => {
+        console.log(err)
         res.json({ message: "Произошла ошибка при отпраке сообщения студенту. Пользователь создан." })
       });
 
