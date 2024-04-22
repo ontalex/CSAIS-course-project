@@ -38,7 +38,7 @@ export default function TopLogs() {
                 )}
             >
                 {Boolean(queryTop.data?.length == 0) && (
-                    <p style={{ textAlign: 'center' }}>Нету данных</p>
+                    <p className={st.data_none}>Нету данных</p>
                 )}
                 {Boolean(queryTop.data?.length > 0) &&
                     queryTop.data?.map((item) => (

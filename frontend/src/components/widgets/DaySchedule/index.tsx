@@ -35,7 +35,7 @@ export default function DaySchedule() {
                 )}
             >
                 {Boolean(querySchedule.data?.length == 0) && (
-                    <p style={{ textAlign: 'center' }}>Нету данных</p>
+                    <p className={st.data_none}>Нету данных</p>
                 )}
                 {Boolean(querySchedule.data?.length > 0) &&
                     querySchedule.data?.map((schedule) => (

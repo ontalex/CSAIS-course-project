@@ -20,7 +20,13 @@ export default function PercentLogs() {
                 <Button onClick={queryPercent.refetch}>Обновить</Button>
             </div>
             <div className={stylejoin(st.card_body, st.max_height_1n4)}>
-                <p className={st.card_percent}>{queryPercent.data?.percent}%</p>
+                {!isNaN(queryPercent.data?.percent) ? (
+                    <p className={st.card_percent}>
+                        {queryPercent.data?.percent}%
+                    </p>
+                ) : (
+                    <p className={st.data_none}>Нету данных</p>
+                )}
             </div>
         </div>
     )
