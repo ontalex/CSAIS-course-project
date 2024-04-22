@@ -48,6 +48,17 @@ class ReportsControllers {
 
     }
 
+    get_report_max = async (req, res) => {
+        if (validators.everyFiled(["group_id", "day_start", "day_end"], res.query)) {
+            return res.status(400).json({
+                name: "None felids",
+                message: "Some felid not send"
+            })
+        }
+
+        
+    }   
+
 }
 
 export default new ReportsControllers();
