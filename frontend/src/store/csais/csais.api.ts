@@ -624,12 +624,30 @@ export const csaisApi = createApi({
                     group_id: data.group_id,
                 }
             })
+        }),
+
+        orderGetMax: build.mutation({
+            query: (data) => ({
+                method: "GET",
+                url: "reports/get",
+                headers: {
+                    Authorization: "Bearer " + data.token
+                },
+                params: {
+                    day_start: data.day_start,
+                    day_end: data.day_end,
+                    group_id: data.group_id,
+                    type: data.type
+                }
+            })
         })
 
     })
 })
 
 export const {
+    useOrderGetMaxMutation,
+
     useTeachersAllQuery,
     useTeachersFindQuery,
     useTeachersAddMutation,

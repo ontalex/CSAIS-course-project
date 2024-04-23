@@ -1,0 +1,47 @@
+.form_date {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+    margin-bottom: 20px;
+}
+
+.form_options {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.table {
+    max-width: 100svw;
+    height: 100%;
+    overflow: scroll;
+}
+
+.table td,
+.table th {
+    /* padding: 8px; */
+}
+
+.table_student {
+    min-width: 320px;
+}
+
+.form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 20px;
+    border-radius: 4px;
+    background-color: #f1f1f1;
+}
+
+.form_name {
+    width: 100%;
+}
+
+.form_select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: right;
+}

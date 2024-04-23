@@ -36,6 +36,7 @@ app.use('/api/v1/roles', verifyToken, roles_routs)
 app.use('/api/v1/teachers', verifyToken, teachers_routs);
 app.use('/api/v1/logbook', verifyToken, logbook_routs);
 app.use('/api/v1/olders', verifyToken, older_routs);
+app.use('/api/v1/reports', verifyToken, order_routs);
 
 app.listen(PORT, () => {
     console.log(`===== SERVER to START =====`);

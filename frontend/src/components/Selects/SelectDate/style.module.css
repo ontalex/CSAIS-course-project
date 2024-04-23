@@ -2,11 +2,11 @@
     display: flex;
     justify-content: space-between;
     align-items: stretch;
-    gap: 20px;
+    gap: 10px;
 }
 .btn {
     background-color: #2221;
-    border-radius: 8px;
+    border-radius: 6px;
     border: 0;
 }
 .wrapper {
