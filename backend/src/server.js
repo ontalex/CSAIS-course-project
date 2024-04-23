@@ -38,6 +38,6 @@ app.use('/api/v1/logbook', verifyToken, logbook_routs);
 app.use('/api/v1/olders', verifyToken, older_routs);
 app.use('/api/v1/reports', verifyToken, order_routs);
 
-app.listen(PORT, () => {
+app.listen(PORT, "192.168.1.69", () => {
     console.log(`===== SERVER to START =====`);
 });

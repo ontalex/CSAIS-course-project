@@ -13,7 +13,7 @@ dotenv.config();
 class GroupsControllers {
   get_all_groups = (req, res) => {
     let sql =
-      "SELECT `groups`.`id`, `groups`.`name`, `groups`.`date_create`, `groups`.`date_end`, `teachers`.`id`, `teachers`.`fullname` FROM `groups` JOIN `teachers` ON `groups`.`tutor_id` = `teachers`.`id`";
+      "SELECT `groups`.`id` as `group_id`, `groups`.`name`, `groups`.`date_create`, `groups`.`date_end`, `teachers`.`id`, `teachers`.`fullname` FROM `groups` JOIN `teachers` ON `groups`.`tutor_id` = `teachers`.`id`";
 
     let callback = (err, result) => {
       if (err) {
@@ -31,7 +31,7 @@ class GroupsControllers {
 
   get_find_id_groups = (req, res) => {
     let sql =
-      "SELECT `groups`.`id`, `groups`.`name`, `groups`.`date_create`, `groups`.`date_end`, `teachers`.`id`, `teachers`.`fullname` FROM `groups` JOIN `teachers` ON `groups`.`tutor_id` = `teachers`.`id` WHERE `groups`.`id` = ?;";
+      "SELECT `groups`.`id` as `group_id`, `groups`.`name`, `groups`.`date_create`, `groups`.`date_end`, `teachers`.`id`, `teachers`.`fullname` FROM `groups` JOIN `teachers` ON `groups`.`tutor_id` = `teachers`.`id` WHERE `groups`.`id` = ?;";
     let values = [req.query.id];
     if (validators.everyFiled(values, res)) {
       return res.status(400).json({

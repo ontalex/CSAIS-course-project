@@ -50,20 +50,30 @@ export default function GroupForm({ closeWindow, refetchGruops }) {
                 type="text"
                 placeholder="Название группы"
             />
-            <Input
-                value={date_create}
-                onChange={(e) => setDate_create(e.target.value)}
-                name="date_create"
-                type="date"
-                placeholder="Дата создания"
-            />
-            <Input
-                value={date_end}
-                onChange={(e) => setDate_end(e.target.value)}
-                name="date_end"
-                type="date"
-                placeholder="Дата выпуска"
-            />
+            <label>
+                <p style={{ marginBottom: '4px', marginTop: '0px' }}>
+                    Дата создания
+                </p>
+                <Input
+                    value={date_create}
+                    onChange={(e) => setDate_create(e.target.value)}
+                    name="date_create"
+                    type="date"
+                    placeholder="Дата создания"
+                />
+            </label>
+            <label>
+                <p style={{ marginBottom: '4px', marginTop: '0px' }}>
+                    Дата выпуска
+                </p>
+                <Input
+                    value={date_end}
+                    onChange={(e) => setDate_end(e.target.value)}
+                    name="date_end"
+                    type="date"
+                    placeholder="Дата выпуска"
+                />
+            </label>
             <InputDelay
                 callback={findingTeachers}
                 inputing={setTeacherFullname}

@@ -67,9 +67,9 @@ export default function Groups() {
                 {query.isFetching && <p>Загрузка...</p>}
                 {query.data?.map((group: T_group_card) => (
                     <GroupsItem
-                        key={group.id}
+                        key={group.group_id}
                         name={group.name}
-                        id={group.id}
+                        group_id={group.group_id}
                         fullname={group.fullname}
                         update={handleUpdate}
                         delete={handleDelete}

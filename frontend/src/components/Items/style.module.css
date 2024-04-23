@@ -64,3 +64,12 @@
     /* font-weight: bold; */
     color: white;
 }
+
+@media screen and (max-width: 426px) {
+    .item {
+        padding: 20px;
+        flex-direction: column;
+        gap: 20px;
+        align-items: start;
+    }
+}

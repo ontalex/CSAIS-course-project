@@ -1,13 +1,13 @@
 @import './vars.css';
 
 body {
-  margin: 0;
-  overflow: hidden;
-
-  font-family: sans-serif;
+    margin: 0;
+    max-height: 100svh;
+    font-family: sans-serif;
 }
 
 #root {
-  width: 100svw;
-  height: 100svh;
+    width: 100svw;
+    /* height: 100svh; */
+    height: 100%;
 }

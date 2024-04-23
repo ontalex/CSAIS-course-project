@@ -18,7 +18,7 @@ import Lessons from './pages/Admin/Data/Lessons'
 import Groups from './pages/Admin/Data/Groups'
 import Students from './pages/Admin/Data/Students'
 import Teachers from './pages/Admin/Data/Teachers'
-import React, { Suspense } from 'react'
+import React, { Suspense, useEffect } from 'react'
 
 export default function App() {
     return (

@@ -14,13 +14,13 @@ export default function GroupsItem(data) {
                 <div className={st.btns}>
                     <button
                         className={st.item_update}
-                        onClick={() => data.update(data.id)}
+                        onClick={() => data.update(data.group_id)}
                     >
                         <span>Изменить</span>
                     </button>
                     <button
                         className={st.item_delete}
-                        onClick={() => data.delete(data.id)}
+                        onClick={() => data.delete(data.group_id)}
                     >
                         <span>Удалить</span>
                     </button>

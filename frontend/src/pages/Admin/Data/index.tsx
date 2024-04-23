@@ -32,7 +32,14 @@ export default function Data() {
                 <div className={st.menu_tables}>
                     {links.map((link) => (
                         <NavLink
-                            className={({ isActive }) => (isActive ? stylejoin(st.menu_link, st.menu_link_active) : st.menu_link)}
+                            className={({ isActive }) =>
+                                isActive
+                                    ? stylejoin(
+                                          st.menu_link,
+                                          st.menu_link_active
+                                      )
+                                    : st.menu_link
+                            }
                             to={link.path}
                         >
                             {link.name}

@@ -49,10 +49,13 @@ export function Login() {
             <div className={st.form_box}>
                 <div className={st.logo_box}>
                     <img src={logo} alt="" className={st.logo_img} />
-                    <h1 className={st.logo_name}>испук</h1>
-                    <p className={st.logo_description}>
-                        Информационная система посещаемости учащихся колледжа
-                    </p>
+                    <div className={st.login_box_text}>
+                        <h1 className={st.logo_name}>испук</h1>
+                        <p className={st.logo_description}>
+                            Информационная система посещаемости учащихся
+                            колледжа
+                        </p>
+                    </div>
                 </div>
                 <form onSubmit={submitForm} className={st.form}>
                     <h2 className={st.form_span}>Вход в систему</h2>
