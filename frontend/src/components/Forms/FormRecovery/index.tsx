@@ -3,13 +3,13 @@ import Button from '../../Button'
 import Input from '../../Input'
 
 import st from './page.module.css'
-import {
-    useAccessesGroupsQuery,
-    useRecoveryAccountMutation,
-} from '../../../store/csais/csais.api'
-import { Link } from 'react-router-dom'
+import { useRecoveryAccountMutation } from '../../../store/csais/csais.api'
 
-export default function FormRecovery() {
+export default function FormRecovery({
+    switchForm,
+}: {
+    switchForm: () => void
+}) {
     const [recover, recoverRes] = useRecoveryAccountMutation()
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -23,12 +23,8 @@ export default function FormRecovery() {
 
     return (
         <form onSubmit={handleSubmit} className={st.form}>
-            {recoverRes.isSuccess && (
-                <Link to={'/login'}>Перейти к авторизации</Link>
-            )}
-
             {recoverRes.isLoading && (
-                <p style={{ textAlign: 'center', color: "blue" }}>
+                <p style={{ textAlign: 'center', color: 'blue' }}>
                     ... Загрузка ...
                 </p>
             )}
@@ -44,6 +40,11 @@ export default function FormRecovery() {
             <button className={st.form_send}>
                 <span>Восстановить</span>
             </button>
+            {recoverRes.isSuccess && (
+                <Button onClick={switchForm}>
+                    <span>К авторизации &gt;</span>
+                </Button>
+            )}
         </form>
     )
 }

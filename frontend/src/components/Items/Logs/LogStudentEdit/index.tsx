@@ -1,7 +1,11 @@
 import React, { SelectHTMLAttributes, useContext } from 'react'
 import st from '../style.module.css'
 import { useAuth } from '../../../../hooks/useAuth'
-import { useLogbookAddMutation, useLogbookDeleteMutation, useLogbookUpdateMutation } from '../../../../store/csais/csais.api'
+import {
+    useLogbookAddMutation,
+    useLogbookDeleteMutation,
+    useLogbookUpdateMutation,
+} from '../../../../store/csais/csais.api'
 import Button from '../../../Button'
 import stylejoin from '../../../../lib/stylejoin'
 import { LogsListContext } from '../LogbookView'
@@ -11,7 +15,7 @@ export default function LogStudentEdit({
     schedule_id,
     student_id,
     id,
-    refetch
+    refetch,
 }: {
     typeLog: {
         type: string
@@ -30,32 +34,30 @@ export default function LogStudentEdit({
     const [deleteLog, deleteLogRes] = useLogbookDeleteMutation()
 
     const handleSelectLog = (event: React.ChangeEvent<HTMLSelectElement>) => {
-
-        if (typeLog.type == "none") {
+        if (typeLog.type == 'none') {
             addLog({
                 token: user.token,
                 type_log: event.target.value,
                 schedule_id: schedule_id,
-                student_id: student_id
-            });
+                student_id: student_id,
+            })
         } else {
             // console.log("Update Log");
             updateLog({
                 token: user.token,
                 type_log: event.target.value,
-                id: id
+                id: id,
             })
         }
-        setTimeout( () => refetch(), 1000 )
-     
+        setTimeout(() => refetch(), 1000)
     }
 
     const handleDelteLog = () => {
         deleteLog({
             token: user.token,
-            id: id
+            id: id,
         })
-        setTimeout( () => refetch(), 1000 )
+        setTimeout(() => refetch(), 1000)
     }
 
     return (
@@ -69,7 +71,12 @@ export default function LogStudentEdit({
                     value={typeLog.type}
                     onChange={handleSelectLog}
                 >
-                    <option selected={typeLog.type == "none"} disabled={typeLog.type != "none"}>На месте</option>
+                    <option
+                        selected={typeLog.type == 'none'}
+                        disabled={typeLog.type != 'none'}
+                    >
+                        На месте
+                    </option>
                     <option value="у">Уважительная</option>
                     <option value="н">Неуважительная</option>
                     <option value="б">Болезнь</option>

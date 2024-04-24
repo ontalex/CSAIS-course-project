@@ -61,7 +61,7 @@ export function Login() {
                     </div>
                 </div>
                 {isRecover ? (
-                    <FormRecovery />
+                    <FormRecovery switchForm={() => setIsRecover(false)} />
                 ) : (
                     <form onSubmit={submitForm} className={st.form}>
                         <h2 className={st.form_span}>Вход в систему</h2>
@@ -92,10 +92,13 @@ export function Login() {
                             value={password}
                             placeholder="Пароль"
                         />
-                        <button onClick={(event) => {
-                            event.preventDefault();
-                            setIsRecover(true);
-                        }} className={st.form_send}>
+                        <button
+                            onClick={(event) => {
+                                event.preventDefault()
+                                setIsRecover(true)
+                            }}
+                            className={st.form_send}
+                        >
                             <span>Не помню пароль или логин</span>
                         </button>
                         <button className={st.form_send}>
