@@ -86,18 +86,28 @@ export default function GroupUpdateForm({ setIsOpenUpdate, query, groupID }) {
                     onChange={(e) => setNameGroup(e.target.value)}
                     placeholder="Название"
                 />
-                <Input
-                    type="date"
-                    name="dateStart"
-                    value={dateStart}
-                    onChange={(e) => setDateStart(e.target.value)}
-                />
-                <Input
-                    type="date"
-                    name="dateEnd"
-                    value={dateEnd}
-                    onChange={(e) => setDateEnd(e.target.value)}
-                />
+                <label>
+                    <p style={{ marginBottom: '4px', marginTop: '0px' }}>
+                        Дата создания
+                    </p>
+                    <Input
+                        type="date"
+                        name="dateStart"
+                        value={dateStart}
+                        onChange={(e) => setDateStart(e.target.value)}
+                    />
+                </label>
+                <label>
+                    <p style={{ marginBottom: '4px', marginTop: '0px' }}>
+                        Дата выпуска
+                    </p>
+                    <Input
+                        type="date"
+                        name="dateEnd"
+                        value={dateEnd}
+                        onChange={(e) => setDateEnd(e.target.value)}
+                    />
+                </label>
                 <InputDelay
                     name="teacher"
                     list="teachers"
