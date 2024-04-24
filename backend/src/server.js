@@ -20,7 +20,7 @@ import older_routs from "./routes/v1/olders.routes.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.SERVER_PORT || 5000;
 
 app.use(express.json());
 app.use(cors());
@@ -38,6 +38,6 @@ app.use('/api/v1/logbook', verifyToken, logbook_routs);
 app.use('/api/v1/olders', verifyToken, older_routs);
 app.use('/api/v1/reports', verifyToken, order_routs);
 
-app.listen(PORT, "192.168.1.69", () => {
+app.listen(PORT, process.env.SERVER_HOST, () => {
     console.log(`===== SERVER to START =====`);
 });

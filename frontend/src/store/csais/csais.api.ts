@@ -9,7 +9,7 @@ export const csaisApi = createApi({
     refetchOnMountOrArgChange: true,
     reducerPath: "csais/api",
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://192.168.1.69:5000/api/v1/',
+        baseUrl: 'http://localhost:5000/api/v1/',
     }),
     endpoints: build => ({
 
