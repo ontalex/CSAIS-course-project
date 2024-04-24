@@ -1,15 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { TRQ_token, TRQ_login, I_Schedule_Add_Send, I_Schedule_Get_Send, I_Schedule_Delete_Send } from "../../types/csais.types";
-import { method } from "lodash";
-// import { method } from "lodash";
 
 export const csaisApi = createApi({
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
     reducerPath: "csais/api",
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://192.168.1.69:5000/api/v1/',
+        // baseUrl: 'http://10.0.1.32:5000/api/v1/',
+        baseUrl: 'http://localhost:5000/api/v1/',
     }),
     endpoints: build => ({
 
@@ -34,6 +33,16 @@ export const csaisApi = createApi({
                 method: "GET",
                 headers: {
                     Authorization: "Bearer " + data.token
+                }
+            })
+        }),
+
+        recoveryAccount: build.mutation({
+            query: (data) => ({
+                url: "auth/recovery",
+                method: "POST",
+                body: {
+                    email: data.email
                 }
             })
         }),
@@ -683,6 +692,7 @@ export const {
     useAuthMutation,
     useAuthTokenMutation,
     useAccessesGroupsQuery,
+    useRecoveryAccountMutation,
 
     useProfileGetSelfQuery,
     useProfileUpdateSelfMutation,

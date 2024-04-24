@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { SerializedError } from '@reduxjs/toolkit'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import FormRecovery from '../../components/Forms/FormRecovery'
 // import { useAuthMutation } from '../../store/csais/csais.api'
 // import { TRQ_answer_auth } from '../../types/csais.types'
 
@@ -19,6 +20,8 @@ export function Login() {
     const [errorData, setErrorData] = useState()
 
     const { signin } = useAuth()
+
+    const [isRecover, setIsRecover] = useState(false)
 
     function submitForm(e: React.FormEvent<HTMLFormElement>) {
         // прервать поведение
@@ -57,39 +60,49 @@ export function Login() {
                         </p>
                     </div>
                 </div>
-                <form onSubmit={submitForm} className={st.form}>
-                    <h2 className={st.form_span}>Вход в систему</h2>
-                    {errorData?.isError && (
-                        <p
-                            style={{
-                                color: 'red',
-                                textAlign: 'center',
-                            }}
-                        >
-                            (Ошибка {errorData.error.status}){' '}
-                            {errorData.error.data?.message}
-                        </p>
-                    )}
-                    <Input
-                        type="text"
-                        name="login"
-                        id="login_auth"
-                        onChange={(e) => setLogin(e.target.value)}
-                        value={login}
-                        placeholder="Логин"
-                    />
-                    <Input
-                        type="password"
-                        name="password"
-                        id="password_auth"
-                        onChange={(e) => setPassword(e.target.value)}
-                        value={password}
-                        placeholder="Пароль"
-                    />
-                    <button className={st.form_send}>
-                        <span>Войти</span>
-                    </button>
-                </form>
+                {isRecover ? (
+                    <FormRecovery />
+                ) : (
+                    <form onSubmit={submitForm} className={st.form}>
+                        <h2 className={st.form_span}>Вход в систему</h2>
+                        {errorData?.isError && (
+                            <p
+                                style={{
+                                    color: 'red',
+                                    textAlign: 'center',
+                                }}
+                            >
+                                (Ошибка {errorData.error.status}){' '}
+                                {errorData.error.data?.message}
+                            </p>
+                        )}
+                        <Input
+                            type="text"
+                            name="login"
+                            id="login_auth"
+                            onChange={(e) => setLogin(e.target.value)}
+                            value={login}
+                            placeholder="Логин"
+                        />
+                        <Input
+                            type="password"
+                            name="password"
+                            id="password_auth"
+                            onChange={(e) => setPassword(e.target.value)}
+                            value={password}
+                            placeholder="Пароль"
+                        />
+                        <button onClick={(event) => {
+                            event.preventDefault();
+                            setIsRecover(true);
+                        }} className={st.form_send}>
+                            <span>Не помню пароль или логин</span>
+                        </button>
+                        <button className={st.form_send}>
+                            <span>Войти</span>
+                        </button>
+                    </form>
+                )}
             </div>
         </div>
     )
