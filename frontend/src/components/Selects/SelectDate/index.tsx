@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react'
 import st from './style.module.css'
 
+import arrow_icon from "../../../assets/arrow_icon.svg"
+
 interface ISelectDate {
     setDate: (newDate: string) => void
     date: string
@@ -38,7 +40,7 @@ export default function SelectDate({ setDate, date }: ISelectDate) {
     return (
         <div className={st.box}>
             <button className={st.btn} onClick={handlePrevDay}>
-                Prev
+                <img src={arrow_icon} alt="" />
             </button>
             <label className={st.wrapper}>
                 <p className={st.wrapper_date}>
@@ -57,7 +59,7 @@ export default function SelectDate({ setDate, date }: ISelectDate) {
                 />
             </label>
             <button className={st.btn} onClick={handleNextDay}>
-                Next
+                <img src={arrow_icon} alt="" style={{rotate: "180deg"}}/>
             </button>
         </div>
     )

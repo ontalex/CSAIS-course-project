@@ -1,8 +1,3 @@
-// Создать 3 redusers (slices):
-// + user (token, role),
-// + group (groupID),
-// + schedule (date, order: {dateStart, dateEnd})
-
 import { createSlice } from "@reduxjs/toolkit";
 
 const init = { groupID: undefined };
