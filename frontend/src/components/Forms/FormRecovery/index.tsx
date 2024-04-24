@@ -40,11 +40,9 @@ export default function FormRecovery({
             <button className={st.form_send}>
                 <span>Восстановить</span>
             </button>
-            {recoverRes.isSuccess && (
-                <Button onClick={switchForm}>
-                    <span>К авторизации &gt;</span>
-                </Button>
-            )}
+            <Button onClick={switchForm}>
+                <span>К авторизации &gt;</span>
+            </Button>
         </form>
     )
 }
