@@ -175,29 +175,29 @@ class AuthController {
         // получить почту
         if (
             validators.everyFiled(
-              ["email"],
-              res.body
+                ["email"],
+                res.body
             )
-          ) {
+        ) {
             return res.status(400).json({
-              name: "None felids",
-              message: "Some felid not send",
+                name: "None felids",
+                message: "Some felid not send",
             });
-          }
+        }
         // проверить есть ли пользователя с такой почтой
         let sqlFindUser = "select `users`.`login`, `students`.`email` as `student_email`, `teachers`.`email` as `teacher_email`, `users`.`isactive` from `users` LEFT JOIN `teachers` ON `users`.`teachers_id` = `teachers`.`id` LEFT JOIN `students` ON `users`.`students_id` = `students`.`id` WHERE `users`.`isactive` = 1 AND (`teachers`.`email` = ? OR `students`.`email` = ?);"
         let valuesFindUser = [req.body.email, req.body.email];
         let [data] = await db_pool.promise().query(sqlFindUser, valuesFindUser);
         console.log("FIND: ", data)
 
-        if(data.length == 0) {
+        if (data.length == 0) {
             return req.status(404).json({
                 message: `Пользователь с почтой ${req.body.email} не существует`
             })
         }
 
         let password = data_generation.get_random_string(10);
-        
+
         let sqlUpdatePassword = "update `users` set `users`.`password` = ? where `users`.`isactive` = 1 AND ( `users`.`students_id` = ( select `students`.`id` from `students` WHERE `students`.`email` = ? ) or `users`.`teachers_id` = ( select `teachers`.`id` from `teachers` WHERE `teachers`.`email` = ? ));"
         let valuesUpdatePassword = [bcrypt.hashSync(password, parseInt(process.env.SALT)), req.body.email, req.body.email];
         let [data_promise_update] = await db_pool.promise().query(sqlUpdatePassword, valuesUpdatePassword);
@@ -205,37 +205,37 @@ class AuthController {
         console.log(password);
         console.log(data_promise_update);
 
-        if( data_promise_update.affectedRows > 0 ) {
+        if (data_promise_update.affectedRows > 0) {
 
             let transporter = nodemailer.createTransport({
                 host: process.env.SMTP_HOST,
                 port: process.env.SMTP_PORT,
                 secure: false,
                 auth: {
-                  user: process.env.SMTP_USER,
-                  pass: process.env.SMTP_PASS,
+                    user: process.env.SMTP_USER,
+                    pass: process.env.SMTP_PASS,
                 },
-              });
-        
-              transporter.sendMail({
+            });
+
+            transporter.sendMail({
                 from: 'CASIS <csaisforcollege@yandex.ru>',
                 to: req.body.email,
-                subject: "Был изменнпароль от вашего аккаунта",
-                html: `<p>Вам был изменен пароль к системе ИСПУК (Информационная система посещаемости учащихся колледжа)</p><p>Логин: ${data[0].login}</p><p>Пароль: ${password}</p><p>(Письмо сформированно автоматически, ответ вы не получите)</p>`
-              }).then(() => {
+                subject: "Был изменён пароль от вашего аккаунта",
+                html: `<p>Вам был изменен пароль к системе ИСПУК (Информационная система посещаемости учащихся колледжа)</p><p>Логин: ${data[0].login}</p><p>Пароль: ${password}</p><p>(Письмо сформировано автоматически, ответ вы не получите)</p>`
+            }).then(() => {
                 res.json({ message: "Пользователь изменен. Данные отправлены студенту." });
-              }).catch((err) => {
+            }).catch((err) => {
                 console.log(err)
-                res.json({ message: "Произошла ошибка при отпраке сообщения студенту. Пользователь изменен." })
-              });
+                res.json({ message: "Произошла ошибка при отправке сообщения студенту. Пользователь изменен." })
+            });
 
         } else {
             res.json({
                 message: "Ни чего не произошло"
             })
         }
-        
-    };  
+
+    };
 }
 
 export default new AuthController();
