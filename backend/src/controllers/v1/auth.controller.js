@@ -21,6 +21,7 @@ class AuthController {
                     find_user_felids,
                     (err, result) => {
                         if (err) {
+                            console.log(err);
                             reject(err);
                         } else {
                             resolve(result[0]);
@@ -71,6 +72,7 @@ class AuthController {
 
             jwt.verify(token, process.env.SECRET_KEY, (err) => {
                 if (err) {
+                    console.log(err);
                     return res.status(401).json({
                         accept: false,
                         message:
@@ -104,6 +106,7 @@ class AuthController {
 
                 db_pool.query(currentSQL, [decoded.user_id], (err, result) => {
                     if (err) {
+                        console.log(err);
                         return res.status(500).json({
                             message: err.message,
                         });
@@ -121,6 +124,7 @@ class AuthController {
                 });
             });
         } catch (error) {
+            console.log(error);
             return res.status(401).json({
                 accept: false,
                 message: "Пользователь не авторизован.",
@@ -156,6 +160,7 @@ class AuthController {
 
             db_pool.query(currentSQL, [decoded.user_id], (err, result) => {
                 if (err) {
+                    console.log(err);
                     return res.status(500).json({
                         message: err.message,
                     });

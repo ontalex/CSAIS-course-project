@@ -142,62 +142,86 @@ class GroupsControllers {
 
     db_pool.query(sql, values, callback);
   };
-  put_update_groups = (req, res) => {
-    // let sql =
-    //   "update `groups` set name = ?, date_create = ?, date_end = ?, tutor_id = (select id from teachers where fullname = ? limit 1) where id = ?;";
+  put_update_groups = async (req, res) => {
+    if (validators.everyFiled(["name", "date_create", "date_end", "tutor_name"], res.body)) {
+      return res.status(400).json({
+        name: "None felids",
+        message: "Some felid not send",
+      });
+    }
+    if (validators.everyFiled(["id"], res.query)) {
+      return res.status(400).json({
+        name: "None felids",
+        message: "Some felid not send",
+      });
+    }
 
-    // let values = [req.body.name, req.body.date_create, req.body.date_end, req.body.tutor_name, req.query.id];
+    async function createUserFromTeacher() {
 
-    // if (validators.everyFiled(values, res)) {
-    //   return res.status(400).json({
-    //     name: "None felids",
-    //     message: "Some felid not send",
-    //   });
-    // }
+      // генерация логина
+      let loginPref = [new Date().getDay(), new Date().getUTCMonth(), new Date().getMilliseconds(), new Date().getHours(), new Date().getMinutes(), new Date().getSeconds()].map((item) => item.toString()).join("");
+      let login = "tutor" + loginPref;
 
+      // генерация пароля
+      let password = data_generation.get_random_string(10);
 
+      let data_teacher = await helpers.getTeacher(req.body.tutor_name);
+      console.log("GET data_teacher: ", data_teacher);
 
-    // let callback = async (err, result) => {
-    //   if (err) {
-    //     res.status(500).json({
-    //       name: err.name,
-    //       message: err.message,
-    //     });
-    //   }
+      let sqlTutor = "insert into `users` (login, password, secret_key, teachers_id, roles_id) value (?, ?, ?, ?, ?);"
+      let valueTutor = [login, bcryptjs.hashSync(password, parseInt(process.env.SALT)), data_generation.get_random_string(36), data_teacher.id, await helpers.getRoleID("tutor"),];
 
-    //   if (result.affectedRows > 0) {
-    //     let user = await helpers.get_data_updated_user(req.body.tutor_name);
-    //     helpers.send_mail({
-    //       target: user.email,
-    //       topic: "Обновлён куратор группы",
-    //       html: `<p>Здравствуйте, Вы назначены в качестве куратора для группы ${req.body.name}. Воспользуйтесь своим аккаунтом для просмотра информации.</p>`,
-    //       res: res
-    //     })
-    //   } else {
-    //     let data_teacher = helpers.getTeacher(req.body.tutor_name);
-    //     helpers.send_mail({
-    //       target: data_teacher.email,
-    //       topic: "Вам предоставлен доступ...",
-    //       html: `<p>Вам предоставлен доступ к системе ИСПУК (Информационная система посещаемости учащихся колледжа)</p><p>Логин: ${login}</p><p>Пароль: ${password}</p><p>(Письмо сформированно автоматически, ответ вы не получите)</p>`,
-    //       res: res
-    //     });
-    //   }
+      let [dataCreateTutor] = await db_pool.promise().query(sqlTutor, valueTutor);
 
-    //   res.json(result);
-    // };
+      console.log("Data Create Tutor:", dataCreateTutor);
+      console.log("Data Create Tutor (JSON):", JSON.stringify(dataCreateTutor));
 
+      await helpers.send_mail({
+        target: data_teacher.email,
+        topic: "Вам предоставлен доступ...",
+        html: `<p>Вам предоставлен доступ к системе ИСПУК (Информационная система посещаемости учащихся колледжа)</p><p>Логин: ${login}</p><p>Пароль: ${password}</p><p>(Письмо сформированно автоматически, ответ вы не получите)</p>`,
+      });
+    }
 
+    async function updateTutor() {
 
-    // Группа существует?
-    // Есть пользователь с id преподавателя под таким ФИО?
-    // (да)   - Обновить куратора для группы;
-    //        - Отправить на почту преподавателя сообщение о назначении;
-    // (нет)  - Создать пользователя;
-    //        - Отправить сообщение о создании пользователя;
-    //        - Обновить куратора для группы;
-    //        - Отправить на почту преподавателя сообщение о назначении;
+      let sql =
+        "update `groups` set name = ?, date_create = ?, date_end = ?, tutor_id = (select id from teachers where fullname = ? limit 1) where id = ?;";
+      let values = [req.body.name, req.body.date_create, req.body.date_end, req.body.tutor_name, req.query.id];
+      let [updateResult] = await db_pool.promise().query(sql, values);
+      console.log("Updated Result:", updateResult);
 
+      let user = await helpers.getTeacher(req.body.tutor_name);
+      await helpers.send_mail({
+        target: user.email,
+        topic: "Обновлён куратор группы",
+        html: `<p>Здравствуйте, Вы назначены в качестве куратора для группы ${req.body.name}. Воспользуйтесь своим аккаунтом для просмотра информации.</p>`,
+        res: res
+      })
+
+    }
+
+    let [groupData] = await db_pool.promise().query(
+      "select * from `groups` where `groups`.`id` = ?;",
+      [req.query.id]
+    );
+    console.log("Data Groups:", groupData);
+    if (groupData.length < 1) return res.json({ message: "Нету группы" });
+
+    let [teacherData] = await db_pool.promise().query(
+      "SELECT * FROM `teachers` JOIN `users` ON `teachers`.`id` = `users`.`teachers_id` WHERE `teachers`.`fullname` = ?;",
+      [req.body.tutor_name]
+    );
+    console.log("Data Teachers:", teacherData);
+    if (teacherData.length < 1) {
+      console.log("Не найден преподаватель-куратор");
+      await createUserFromTeacher();
+      return await updateTutor()
+    } else {
+      return await updateTutor()
+    }
   };
+
   delete_group = (req, res) => {
     let sql = "delete from `groups` where id = ?;";
     let values = [req.query.id];

@@ -143,10 +143,10 @@ class Helpers {
       subject: topic,
       html: html
     }).then(() => {
-      return res.json({ type: "Error", message: "Данные отправлены." });
+      if (res) return res.json({ type: "Error", message: "Данные отправлены." });
     }).catch((err) => {
       console.log(err)
-      return res.json({ type: "Error", message: "Произошла ошибка при отправке сообщения." })
+      if (res) return res.json({ type: "Error", message: "Произошла ошибка при отправке сообщения." })
     });
   };
 
