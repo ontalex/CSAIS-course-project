@@ -1,11 +1,11 @@
 import { db_pool } from "../../helpers/database.js";
 import data_generation from "../../helpers/data_generation.js";
 import bcrypt from "bcryptjs";
-import nodemailer from "nodemailer";
 import validators from "../../helpers/validators.js";
 import jwt from "jsonwebtoken";
 
 import dotenv from "dotenv";
+import helpers from "../../helpers/helpers.js";
 dotenv.config();
 
 class AuthController {
@@ -206,28 +206,12 @@ class AuthController {
         console.log(data_promise_update);
 
         if (data_promise_update.affectedRows > 0) {
-
-            let transporter = nodemailer.createTransport({
-                host: process.env.SMTP_HOST,
-                port: process.env.SMTP_PORT,
-                secure: false,
-                auth: {
-                    user: process.env.SMTP_USER,
-                    pass: process.env.SMTP_PASS,
-                },
-            });
-
-            transporter.sendMail({
-                from: 'CASIS <csaisforcollege@yandex.ru>',
-                to: req.body.email,
-                subject: "Был изменён пароль от вашего аккаунта",
-                html: `<p>Вам был изменен пароль к системе ИСПУК (Информационная система посещаемости учащихся колледжа)</p><p>Логин: ${data[0].login}</p><p>Пароль: ${password}</p><p>(Письмо сформировано автоматически, ответ вы не получите)</p>`
-            }).then(() => {
-                res.json({ message: "Пользователь изменен. Данные отправлены студенту." });
-            }).catch((err) => {
-                console.log(err)
-                res.json({ message: "Произошла ошибка при отправке сообщения студенту. Пользователь изменен." })
-            });
+            await helpers.send_mail({
+                target: req.body.email,
+                topic: "Был изменён пароль от вашего аккаунта",
+                html: `<p>Вам был изменен пароль к системе ИСПУК (Информационная система посещаемости учащихся колледжа)</p><p>Логин: ${data[0].login}</p><p>Пароль: ${password}</p><p>(Письмо сформировано автоматически, ответ вы не получите)</p>`,
+                res: res
+            })
 
         } else {
             res.json({
