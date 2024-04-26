@@ -4,7 +4,7 @@
   "description": "Курсовой проект приложения для оптимизации процессов контроля посещаемости студентов «Информационная система посещаемости учащихся колледжа. ИСПУК»",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "run.bat"
   },
   "keywords": [],
   "author": "",
