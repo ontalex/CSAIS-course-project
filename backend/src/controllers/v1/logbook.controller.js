@@ -94,10 +94,6 @@ class LogbookController {
 
     delete_logbook = (req, res) => {
         let sql = 'delete from `logbook` where `logbook`.`id` = ?;';
-        console.log({
-            query: req.query,
-            body: req.body
-        })
         let values = [req.query.id];
         if (validators.everyFiled(["id"], req.query)) {
             return res.status(400).json({
@@ -126,18 +122,9 @@ class LogbookController {
                     message: "Some felid not send"
                 })
             }
-
             let sql = "SELECT COUNT(*) as count_logs, students.id, students.fullname FROM logbook JOIN students on logbook.students_id = students.id JOIN schedule ON logbook.schedule_id = schedule.id WHERE ( schedule.date_lesson BETWEEN ? AND ? ) AND students.group_id = ? AND logbook.type_log = ? GROUP BY logbook.students_id ORDER BY count_logs;";
-
             let week = helpers.getMondayAndSunday(req.body.day);
-
-            let values = [
-                week.monday,
-                week.sunday,
-                req.body.group_id,
-                req.body.type_log
-            ];
-
+            let values = [week.monday, week.sunday, req.body.group_id, req.body.type_log];
             let callback = (err, result) => {
                 if (err) {
                     return res.status(500).json({
@@ -148,9 +135,7 @@ class LogbookController {
 
                 res.json(result);
             }
-
             db_pool.query(sql, values, callback);
-
         } catch (error) {
             return res.status(500).json({
                 message: "Server error"

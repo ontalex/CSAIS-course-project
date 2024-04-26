@@ -200,19 +200,9 @@ class GroupsControllers {
   };
   delete_group = (req, res) => {
     let sql = "delete from `groups` where id = ?;";
-
     let values = [req.query.id];
-
-    if (validators.everyFiled(values, res)) {
-      return res.status(400).json({
-        name: "None felids",
-        message: "Some felid not send",
-      });
-    }
-
     let callback = (err, result) => {
       if (err) {
-        console.log(err);
         res.status(500).json({
           name: err.name,
           message: err.message,
@@ -221,6 +211,13 @@ class GroupsControllers {
 
       res.json(result);
     };
+
+    if (validators.everyFiled(values, res)) {
+      return res.status(400).json({
+        name: "None felids",
+        message: "Some felid not send",
+      });
+    }
 
     db_pool.query(sql, values, callback);
   };
