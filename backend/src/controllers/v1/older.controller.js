@@ -3,16 +3,14 @@ import { db_pool } from "../../helpers/database.js";
 import validators from "../../helpers/validators.js";
 import nodemailer from "nodemailer";
 import helpers from "../../helpers/helpers.js";
-import dotenv from "dotenv";
 import data_generation from "../../helpers/data_generation.js";
-import bcryptjs from "bcryptjs"
+import bcryptjs from "bcryptjs";
 
+import dotenv from "dotenv";
 dotenv.config();
 
 class OldersController {
   post_active_older = (req, res) => {
-    // > req.body.student_id
-    // < db < user (student) && !isactive
     let sql =
       "update `users` set `users`.`isactive` = 1 where `users`.`students_id` = ?;";
     let values = [req.body.student_id];
@@ -34,9 +32,8 @@ class OldersController {
     };
     db_pool.query(sql, values, callback);
   };
+
   post_off_older = (req, res) => {
-    // > req.body.student_id
-    // < db < user (student) && !isactive
     let sql =
       "update `users` set `users`.`isactive` = 0 where `users`.`students_id` = ?;";
     let values = [req.body.student_id];
@@ -58,6 +55,7 @@ class OldersController {
     };
     db_pool.query(sql, values, callback);
   };
+
   post_create_older = async (req, res) => {
     if (validators.everyFiled(["student_id"], res.body)) {
       return res.status(400).json({
@@ -65,46 +63,19 @@ class OldersController {
         message: "Some felid not send",
       });
     }
-
-    // ? Есть пользватель
     let answer = await helpers.hasUser(req.body.student_id, res, "older");
-    let student = await helpers.getStudent(req.body.student_id, res)
-
-    console.log(answer)
-    console.log(student)
-
+    let student = await helpers.getStudent(req.body.student_id, res);
     if (answer.isHas) {
       return res.json({
         name: "has",
         message: "Пользвоатель уже создан",
       });
     }
-
-    // генерация логина
-    let loginPref = [
-      new Date().getDay(),
-      new Date().getUTCMonth(),
-      new Date().getMilliseconds(),
-      new Date().getHours(),
-      new Date().getMinutes(),
-      new Date().getSeconds(),
-    ]
-      .map((item) => item.toString())
-      .join("");
+    let loginPref = [new Date().getDay(), new Date().getUTCMonth(), new Date().getMilliseconds(), new Date().getHours(), new Date().getMinutes(), new Date().getSeconds()].map((item) => item.toString()).join("");
     let login = "older" + loginPref;
-
-    // генерация пароля
     let password = data_generation.get_random_string(10);
-
-    let sql =
-      "insert into `users` (login, password, secret_key, students_id, roles_id) value (?, ?, ?, ?, ?);";
-    let value = [
-      login,
-      bcryptjs.hashSync(password, parseInt(process.env.SALT)),
-      data_generation.get_random_string(36),
-      req.body.student_id,
-      await helpers.getRoleID("older"),
-    ];
+    let sql = "insert into `users` (login, password, secret_key, students_id, roles_id) value (?, ?, ?, ?, ?);";
+    let value = [login, bcryptjs.hashSync(password, parseInt(process.env.SALT)), data_generation.get_random_string(36), req.body.student_id, await helpers.getRoleID("older")];
     let callback = async (err, result) => {
       if (err) {
         res.status(500).json({
@@ -112,32 +83,12 @@ class OldersController {
           message: err.message,
         });
       }
-
-      console.log(result)
-
-      let transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT,
-        secure: false,
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS,
-        },
-      });
-
-      transporter.sendMail({
-        from: 'CASIS <csaisforcollege@yandex.ru>',
-        to: student.email,
+      await helpers.send_mail({
+        target: student.email,
         subject: "Вам предоставлен доступ...",
-        html: `<p>Вам предоставлен доступ к системе ИСПУК (Информационная система посещаемости учащихся колледжа)</p><p>Логин: ${login}</p><p>Пароль: ${password}</p><p>(Письмо сформированно автоматически, ответ вы не получите)</p>`
-      }).then(() => {
-        res.json({ message: "Пользователь создан. Данные отправлены студенту." });
-      }).catch((err) => {
-        console.log(err)
-        res.json({ message: "Произошла ошибка при отпраке сообщения студенту. Пользователь создан." })
-      });
-
-
+        html: `<p>Вам предоставлен доступ к системе ИСПУК (Информационная система посещаемости учащихся колледжа)</p><p>Логин: ${login}</p><p>Пароль: ${password}</p><p>(Письмо сформированно автоматически, ответ вы не получите)</p>`,
+        res: res
+      })
     };
     db_pool.query(sql, value, callback);
   };

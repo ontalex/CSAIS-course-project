@@ -18,19 +18,14 @@ class LessonsController {
     }
 
     get_find_lessons = (req, res) => {
-
-
         let sql = `select * from lessons where name like "%${req.query.name}%";`;
-
         let value = [req.query.name];
-
         if (validators.everyFiled(value, res)) {
             return res.status(400).json({
                 name: "None felids",
                 message: "Some felid not send"
             })
         }
-
         let callback = (err, result) => {
             if (err) {
                 res.status(500).json({
@@ -38,7 +33,6 @@ class LessonsController {
                     message: err.message
                 })
             }
-
             res.json(result);
         }
 

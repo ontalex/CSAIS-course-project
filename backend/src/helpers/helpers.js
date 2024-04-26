@@ -1,4 +1,5 @@
 import { db_pool } from "./database.js";
+import nodemailer from "nodemailer";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -29,19 +30,19 @@ class Helpers {
     };
     let sql, values;
 
-    console.log("HELPER HASUSE DATA:",id)
-    
+    console.log("HELPER HASUSE DATA:", id)
+
     if (type == "older") {
       sql = "select * from `users` where `users`.`students_id` = ?;";
     } else if (type == "tutor") {
       sql = "select * from `users` where `users`.`teachers_id` = ?;";
     }
     values = [id];
-    
+
     console.log("HELPER HASUSE sql:", sql, values)
 
     try {
-      let [data, fields] = await db_pool.promise().query(sql, values);
+      let [data] = await db_pool.promise().query(sql, values);
       if (data.length > 0) {
         user.isHas = true;
         user.data = data[0];
@@ -60,10 +61,10 @@ class Helpers {
     let sql = "select `roles`.`id` from `roles` where `roles`.`name` = ?;";
     let values = [role];
     try {
-      let [data, fields] = await db_pool.promise().query(sql, values);
+      let [data] = await db_pool.promise().query(sql, values);
       return data[0].id;
     } catch (err) {
-      return res.status(500).json({
+      throw new Error({
         name: err.name,
         message: err.message,
       });
@@ -71,12 +72,11 @@ class Helpers {
   };
 
   getStudent = async (id_student, res) => {
-    // let user = { data: {} };
     let sql = "select * from `students` where `students`.`id` = ?;";
     let values = [id_student];
     console.log("DB: ", id_student);
     try {
-      let [data, fields] = await db_pool.promise().query(sql, values);
+      let [data] = await db_pool.promise().query(sql, values);
       return data[0];
     } catch (err) {
       return res.status(500).json({
@@ -91,7 +91,7 @@ class Helpers {
       "select * from `teachers` where `teachers`.`fullname` = ? limit 1";
     let values = [fullname];
     try {
-      let [data, fields] = await db_pool.promise().query(sql, values);
+      let [data] = await db_pool.promise().query(sql, values);
       return data[0];
     } catch (err) {
       return res.status(500).json({
@@ -123,6 +123,43 @@ class Helpers {
         name: error.name,
         message: error.message,
       });
+    }
+  };
+
+  send_mail = async ({ target, topic, html, res }) => {
+    let transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      secure: false,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+
+    transporter.sendMail({
+      from: 'CASIS <csaisforcollege@yandex.ru>',
+      to: target,
+      subject: topic,
+      html: html
+    }).then(() => {
+      if (res) return res.json({ type: "Error", message: "Данные отправлены." });
+    }).catch((err) => {
+      console.log(err)
+      if (res) return res.json({ type: "Error", message: "Произошла ошибка при отправке сообщения." })
+    });
+  };
+
+  get_data_updated_user = async ({ fullname }) => {
+    let sql = "select `users`.`email`, `users`.`fullname` from `users` where `users`.`teachers_id` = (select id from teachers where fullname = ? limit 1)";
+    let values = [fullname];
+
+    try {
+      let [data] = await db_pool.promise().query(sql, values);
+      return data
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
     }
   };
 }

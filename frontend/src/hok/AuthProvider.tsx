@@ -39,14 +39,20 @@ export const AuthProvider = ({ children }: { children: T_Props }) => {
             .then(({ data }) => {
                 console.log('Check data: ', data)
 
-                store.dispatch(
-                    groupSlice.actions.setGroup({ groupID: data.group[0].id })
-                )
-
                 setUser({ token: data.token, role: data.role })
 
-                console.log('GROUP from redux:', store.getState().group.groupID)
-                console.log('GROUP from reqest:', data.group[0].id)
+                if (data.group.length > 0) {
+                    store.dispatch(
+                        groupSlice.actions.setGroup({
+                            groupID: data.group[0]?.id,
+                        })
+                    )
+                    console.log(
+                        'GROUP from redux:',
+                        store.getState().group.groupID
+                    )
+                    console.log('GROUP from reqest:', data.group[0].id)
+                }
 
                 localStorage.setItem('token', data.token)
                 console.log('Запрос выполнен. Обработка', data)
