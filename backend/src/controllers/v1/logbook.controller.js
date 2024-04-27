@@ -121,7 +121,7 @@ class LogbookController {
                     message: "Some felid not send"
                 })
             }
-            let sql = "SELECT COUNT(*) as count_logs, students.id, students.fullname FROM logbook JOIN students on logbook.students_id = students.id JOIN schedule ON logbook.schedule_id = schedule.id WHERE ( schedule.date_lesson BETWEEN ? AND ? ) AND students.group_id = ? AND logbook.type_log = ? GROUP BY logbook.students_id ORDER BY count_logs;";
+            let sql = "SELECT COUNT(*) as count_logs, students.id, students.fullname FROM logbook JOIN students on logbook.students_id = students.id JOIN schedule ON logbook.schedule_id = schedule.id WHERE ( schedule.date_lesson BETWEEN ? AND ? ) AND students.group_id = ? AND logbook.type_log = ? GROUP BY logbook.students_id ORDER BY COUNT(*) DESC;";
             let week = helpers.getMondayAndSunday(req.body.day);
             let values = [week.monday, week.sunday, req.body.group_id, req.body.type_log];
             let callback = (err, result) => {
