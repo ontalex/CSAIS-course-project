@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
 import { TRQ_token, TRQ_login, I_Schedule_Add_Send, I_Schedule_Get_Send, I_Schedule_Delete_Send } from "../../types/csais.types";
 
 export const csaisApi = createApi({
@@ -7,7 +6,7 @@ export const csaisApi = createApi({
     refetchOnMountOrArgChange: true,
     reducerPath: "csais/api",
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:5000/api/v1/',
+        baseUrl: `http://localhost:5000/api/v1/`,
     }),
     endpoints: build => ({
 
@@ -23,7 +22,6 @@ export const csaisApi = createApi({
                 console.log(data);
                 return data
             }
-
         }),
 
         authToken: build.mutation({
