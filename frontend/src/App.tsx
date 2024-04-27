@@ -26,6 +26,7 @@ export default function App() {
             <AuthProvider>
                 <Routes>
                     <Route path="/" element={<Index />}>
+                        <Route index element={<Login />} />
                         <Route path="*" element={<Error />} />
                         <Route
                             path="login"
