@@ -196,7 +196,7 @@ class AuthController {
         console.log("FIND: ", data)
 
         if (data.length == 0) {
-            return req.status(404).json({
+            return res.status(404).json({
                 message: `Пользователь с почтой ${req.body.email} не существует`
             })
         }
